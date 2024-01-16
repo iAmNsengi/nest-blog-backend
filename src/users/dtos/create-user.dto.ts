@@ -24,6 +24,9 @@ export class CreateUserDTO {
 
   @IsString()
   @Length(8, 96)
-  @Matches(/^(?=.*[A-Zz-z])(?=.*\d)(?=.[@$!%#?&])[A-Za-z\d@$!%#?&]{8,}$/)
+  @Matches(/^(?=.*[A-Zz-z])(?=.*\d)(?=.[@$!%#?&])[A-Za-z\d@$!%#?&]{8,}$/, {
+    message:
+      'Password must be a minimum of eight characters, one letter, one number and one special character'
+  })
   password: string;
 }
