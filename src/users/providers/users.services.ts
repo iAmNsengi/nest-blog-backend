@@ -10,9 +10,9 @@ import { GetUsersParamDTO } from '../dtos/get-users-params.dto';
 @Injectable()
 export class UsersService {
   public findAll(
-    @Param() getUserParamDTO?: GetUsersParamDTO,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number
+    getUserParamDTO: GetUsersParamDTO,
+    limit: number,
+    page: number
   ) {
     console.log(getUserParamDTO);
 
