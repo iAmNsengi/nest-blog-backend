@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
 import { GetUsersParamDTO } from './dtos/get-users-params.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -17,6 +17,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get('/:id?')
+  // @ApiBody('')
   getUsers(
     @Param() getUserParamDTO?: GetUsersParamDTO,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
