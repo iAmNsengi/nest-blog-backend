@@ -16,7 +16,16 @@ async function bootstrap() {
    * Swagger config
    */
 
-  const config = new DocumentBuilder().setVersion('1.0.1').build();
+  const config = new DocumentBuilder()
+    .setTitle('Blogs App - App API')
+    .setDescription('Use the base API URL as http://localhost:3000')
+    .setTermsOfService('http://localhost:3000/terms-of-service')
+    .setLicense(
+      'MIT License',
+      'https://github.com/git/git-scm.com/blob/gh-pages/MIT-LICENSE.txtt'
+    )
+    .setVersion('1.0.1')
+    .build();
   // Instantiate the document
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
