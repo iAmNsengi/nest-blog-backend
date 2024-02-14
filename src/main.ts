@@ -24,6 +24,7 @@ async function bootstrap() {
       'MIT License',
       'https://github.com/git/git-scm.com/blob/gh-pages/MIT-LICENSE.txtt'
     )
+    .addServer('http://localhost:3000')
     .setVersion('1.0.1')
     .build();
   // Instantiate the document
