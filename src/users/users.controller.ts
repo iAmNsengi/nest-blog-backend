@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
 import { GetUsersParamDTO } from './dtos/get-users-params.dto';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @Controller('users')
@@ -17,7 +17,13 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get('/:id?')
-  // @ApiBody('')
+  @ApiOperation({
+    summary: 'Fetches a list of registered users on the application'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Users fetched successfully'
+  })
   @ApiQuery({
     name: 'limit',
     type: 'number',
