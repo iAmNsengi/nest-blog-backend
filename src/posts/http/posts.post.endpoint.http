@@ -1,16 +1,18 @@
 POST http://localhost:3000/posts
 Content-Type: application/json
 
-{"title":"My first Post",
-"postType":"post",
-"slug":"my-first-post",
-"status":"draft",
-"content":"I am Nsengi  great Dev of the 21st century",
-"schema":"{\r\n \"@context\": \"https"\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n}",
-"featuredImageUrl":"",
-"publishedOn": "2024-12-23T07:46:32+0000",
-"tags":["nestjs","typescript"],
-"metaOptions":[
-    {"key":"","value":20}
-]
+{
+  "title": "My first Post",
+  "postType": "post",
+  "slug": "my-first-post",
+  "status": "draft",
+  "content": "I am Nsengi great Dev of the 21st century",
+  "schema": "{\"@context\": \"https://schema.org\", \"@type\": \"Person\"}",
+  "featuredImageUrl": "https://schema.org",
+  "publishOn": "2024-12-23T07:46:32+0000",
+  "tags": ["nestjs", "typescript"],
+  "metaOptions": [
+    {"key": "exampleKey", "value": 20}
+  ]
 }
+
