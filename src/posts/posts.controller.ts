@@ -2,7 +2,6 @@ import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDTO } from './dtos/create-post.dto';
-import { log } from 'console';
 import { PatchPostDTO } from './dtos/patch-post.dto';
 
 @ApiTags('Posts')
@@ -29,6 +28,10 @@ export class PostsController {
     return this.postService.createPost(createPostDTO);
   }
 
+  @ApiOperation({ description: 'Updates the content of a post' })
+  @ApiResponse({ status: 200, description: 'Post updated successfully' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 500, description: 'Internal server error occured' })
   @Patch()
   public updatePost(@Body() patchPostDTO: PatchPostDTO) {
     console.log('Patch post DTO');
