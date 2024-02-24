@@ -15,17 +15,30 @@ import { postType } from '../enums/post-type.enum';
 import { postStatus } from '../enums/post-status.enum';
 import { CreatePostMetaOptionsDTO } from './create-post-meta-options.dto';
 import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePostDTO {
+  @ApiProperty({
+    description: 'This is the title of the post',
+    example: 'How Nsengi became a developer'
+  })
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
   title: string;
 
+  @ApiProperty({
+    description: 'Possible values: "post", "page","series"',
+    example: 'post'
+  })
   @IsEnum(postType)
   @IsNotEmpty()
   postType: postType;
 
+  @ApiProperty({
+    description: 'Slug of the post',
+    example: 'how-nsengi-became-a-developer'
+  })
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
@@ -34,6 +47,7 @@ export class CreatePostDTO {
   })
   slug: string;
 
+  @ApiProperty()
   @IsEnum(postStatus)
   status: postStatus;
 
@@ -54,6 +68,7 @@ export class CreatePostDTO {
   @IsOptional()
   publishOn?: Date;
 
+  @ApiProperty()
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
