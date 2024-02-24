@@ -9,7 +9,7 @@ Content-Type: application/json
   "content": "I am Nsengi great Dev of the 21st century",
   "schema": "{\"@context\": \"https://schema.org\", \"@type\": \"Person\"}",
   "featuredImageUrl": "https://schema.org",
-  "publishOn": "2024-12-23T07:46:32+0000",
+  "publishedOn": "2024-12-23T07:46:32+0000",
   "tags": ["nestjs", "typescript"],
   "metaOptions": [
     {"key": "exampleKey", "value": 20}

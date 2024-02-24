@@ -16,6 +16,7 @@ import { postStatus } from '../enums/post-status.enum';
 import { CreatePostMetaOptionsDTO } from './create-post-meta-options.dto';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { validateHeaderValue } from 'http';
 
 export class CreatePostDTO {
   @ApiProperty({
@@ -51,35 +52,69 @@ export class CreatePostDTO {
   @IsEnum(postStatus)
   status: postStatus;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'This is the post content',
+    example: 'Nsengi was born at a very youn age!'
+  })
   @IsString()
   @IsOptional()
   content?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description:
+      'Serialize your JSON object else a validation  error will be thrown',
+    example: '{\"@context\": \"https://schema.org\", \"@type\": \"Person\"}'
+  })
   @IsString()
   @IsJSON()
   @IsNotEmpty()
   schema?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Add your featured image URL',
+    example: 'https://examples.com/img/img1.png'
+  })
   @IsOptional()
   @IsUrl()
   featuredImageUrl?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'The date on which the blog post is published',
+    example: '2024-12-23T07:46:32+0000'
+  })
   @IsISO8601()
   @IsOptional()
-  publishOn?: Date;
+  publishedOn?: Date;
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    description: 'An array of tags passed as string values',
+    example: ['nestjs', 'programming']
+  })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   @MinLength(3, { each: true })
   tags: string[];
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    type: 'array',
+    required: false,
+    items: {
+      type: 'object',
+      properties: {
+        key: {
+          type: 'string',
+          description: 'The key can be any string identifier for meta option',
+          example: 'sidebarEnabled'
+        },
+        value: {
+          type: 'any',
+          description: 'The value can be anything',
+          example: true
+        }
+      }
+    }
+  })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
