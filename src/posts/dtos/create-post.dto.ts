@@ -15,7 +15,7 @@ import { postType } from '../enums/post-type.enum';
 import { postStatus } from '../enums/post-status.enum';
 import { CreatePostMetaOptionsDTO } from './create-post-meta-options.dto';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePostDTO {
   @ApiProperty({
@@ -51,19 +51,23 @@ export class CreatePostDTO {
   @IsEnum(postStatus)
   status: postStatus;
 
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   content?: string;
 
+  @ApiPropertyOptional()
   @IsString()
   @IsJSON()
   @IsNotEmpty()
   schema?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsUrl()
   featuredImageUrl?: string;
 
+  @ApiPropertyOptional()
   @IsISO8601()
   @IsOptional()
   publishOn?: Date;
@@ -75,6 +79,7 @@ export class CreatePostDTO {
   @MinLength(3, { each: true })
   tags: string[];
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
