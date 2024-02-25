@@ -119,6 +119,13 @@
         </p>
 
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Class to connect to users table and perform business logics</p>
+
+            </p>
 
 
 
@@ -166,12 +173,14 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="7" class="link-to-prism">src/users/providers/users.services.ts:7</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/users/providers/users.services.ts:10</a></div>
                             </td>
                         </tr>
 
                 <tr>
                     <td class="col-md-4">
+                            <div class="io-description"><p>Constructor</p>
+</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -231,14 +240,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="12"
-                                    class="link-to-prism">src/users/providers/users.services.ts:12</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="21"
+                                    class="link-to-prism">src/users/providers/users.services.ts:21</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Method to find all users</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -324,14 +335,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="37"
-                                    class="link-to-prism">src/users/providers/users.services.ts:37</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="48"
+                                    class="link-to-prism">src/users/providers/users.services.ts:48</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Find user by ID</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -382,12 +395,21 @@ import { GetUsersParamDTO } from &#x27;../dtos/get-users-params.dto&#x27;;
 import { AuthService } from &#x27;src/auth/auth.service&#x27;;
 import { log } from &#x27;console&#x27;;
 
+/**
+ * Class to connect to users table and perform business logics
+ */
 @Injectable()
 export class UsersService {
+  /**
+   * Constructor
+   */
   constructor(
     @Inject(forwardRef(() &#x3D;&gt; AuthService))
     private readonly authService: AuthService
   ) {}
+  /**
+   * Method to find all users
+   */
   public findAll(
     getUserParamDTO: GetUsersParamDTO,
     limit: number,
@@ -412,7 +434,9 @@ export class UsersService {
       }
     ];
   }
-
+  /**
+   * Find user by ID
+   */
   public findOneByID(id: number) {
     return {
       firstName: &#x27;John&#x27;,

@@ -3,12 +3,21 @@ import { GetUsersParamDTO } from '../dtos/get-users-params.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { log } from 'console';
 
+/**
+ * Class to connect to users table and perform business logics
+ */
 @Injectable()
 export class UsersService {
+  /**
+   * Constructor
+   */
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService
   ) {}
+  /**
+   * Method to find all users
+   */
   public findAll(
     getUserParamDTO: GetUsersParamDTO,
     limit: number,
@@ -33,7 +42,9 @@ export class UsersService {
       }
     ];
   }
-
+  /**
+   * Find user by ID
+   */
   public findOneByID(id: number) {
     return {
       firstName: 'John',
