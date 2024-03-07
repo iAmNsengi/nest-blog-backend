@@ -12,6 +12,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     PostsModule,
     AuthModule,
     TypeOrmModule.forRootAsync({
+      imports: [],
+      inject: [],
       useFactory: () => ({
         type: 'postgres',
         entities: [],
