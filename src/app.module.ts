@@ -11,15 +11,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UsersModule,
     PostsModule,
     AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      entities: [],
-      synchronize: true,
-      port: 5432,
-      username: 'postgres',
-      password: 'iamnsengi',
-      host: 'localhost',
-      database: 'blog-database'
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres',
+        entities: [],
+        synchronize: true,
+        port: 5432,
+        username: 'postgres',
+        password: 'iamnsengi',
+        host: 'localhost',
+        database: 'blog-database'
+      })
     })
   ],
   controllers: [AppController],
