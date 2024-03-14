@@ -8,28 +8,38 @@ export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 96, nullable: false })
+  @Column({ type: 'varchar', length: 512, nullable: false })
   title: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: postType,
+    nullable: false,
+    default: postType.POST
+  })
   postType: postType;
 
-  @Column({ type: 'varchar', length: 96, nullable: false })
+  @Column({ type: 'varchar', length: 256, nullable: false, unique: true })
   slug: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: postStatus,
+    nullable: false,
+    default: postStatus.DRAFT
+  })
   status: postStatus;
 
-  @Column({ type: 'string', nullable: false })
+  @Column({ type: 'text', nullable: true })
   content: string;
 
-  @Column({ type: 'string' })
+  @Column({ type: 'text', nullable: true })
   schema: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 1024, nullable: true })
   featuredImageUrl?: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   publishedOn: Date;
 
   @Column()

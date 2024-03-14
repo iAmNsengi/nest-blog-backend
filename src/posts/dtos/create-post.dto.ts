@@ -27,7 +27,7 @@ export class CreatePostDTO {
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
-  @MaxLength(96)
+  @MaxLength(512)
   title: string;
 
   @ApiProperty({
@@ -48,7 +48,7 @@ export class CreatePostDTO {
     message:
       'A slug should be all small letters and uses only "-" and without spaces. For example : "my-url".'
   })
-  @MaxLength(96)
+  @MaxLength(256)
   slug: string;
 
   @ApiProperty()
@@ -79,6 +79,7 @@ export class CreatePostDTO {
   })
   @IsOptional()
   @IsUrl()
+  @MaxLength(1024)
   featuredImageUrl?: string;
 
   @ApiPropertyOptional({
