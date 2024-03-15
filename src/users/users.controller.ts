@@ -58,15 +58,6 @@ export class UsersController {
   })
   @ApiResponse({ status: 500, description: 'An internal server error occured' })
   public createUser(@Body() createUserDTO: CreateUserDTO) {
-    console.log(
-      new RegexCraft()
-        .hasLengthBetween(8, 96)
-        .hasLetter(1)
-        .hasNumber(1)
-        .hasSpecialCharacter(1)
-        .build(),
-      '--------------'
-    );
     return this.userService.createUser(createUserDTO);
   }
 }
