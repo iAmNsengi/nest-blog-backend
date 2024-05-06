@@ -43,8 +43,8 @@ export class Post {
   publishedOn: Date;
 
   @Column()
-  tags: string[];
+  tags: string;
 
   @Column()
-  metaOptions: [CreatePostMetaOptionsDTO];
+  metaOptions: string;
 }
