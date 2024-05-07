@@ -25,7 +25,7 @@ export class MetaOptionsController {
     description: 'An internal server error occured'
   })
   public getAll() {
-    return 'This is the get all endpoint';
+    return this.metaOptionService.getAll();
   }
 
   @Post()
