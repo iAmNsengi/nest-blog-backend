@@ -17,7 +17,6 @@ import { postStatus } from '../enums/post-status.enum';
 import { CreatePostMetaOptionsDTO } from '../../meta-options/dtos/create-post-meta-options.dto';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { validateHeaderValue } from 'http';
 
 export class CreatePostDTO {
   @ApiProperty({
@@ -101,13 +100,13 @@ export class CreatePostDTO {
   tags: string[];
 
   @ApiPropertyOptional({
-    type: 'array',
-    required: false,
+    type: 'object',
+    additionalProperties: true,
     items: {
       type: 'object',
       properties: {
         metaValue: {
-          type: 'json',
+          type: 'string',
           description: 'The meta value is a JSON string',
           example: '{"sidebarEnabled":true}'
         }
