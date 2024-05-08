@@ -35,9 +35,9 @@ export class PostsController {
       'id',
       new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })
     )
-    id: string
+    id: number
   ) {
-    return this.postService.getPostById(Number(id));
+    return this.postService.getPostById(id);
   }
 
   @ApiOperation({ summary: 'Create a new Blog post' })
