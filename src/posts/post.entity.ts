@@ -5,7 +5,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
-import { CreatePostMetaOptionsDTO } from '../meta-options/dtos/create-post-meta-options.dto';
 import { postStatus } from './enums/post-status.enum';
 import { postType } from './enums/post-type.enum';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
