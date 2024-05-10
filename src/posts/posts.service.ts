@@ -23,7 +23,7 @@ export class PostsService {
     if (postExist)
       throw new HttpException(
         'Post with given title already exists',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.CONFLICT
       );
 
     const post = this.postRepository.create({

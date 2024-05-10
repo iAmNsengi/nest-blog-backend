@@ -43,6 +43,7 @@ export class PostsController {
   @ApiOperation({ summary: 'Create a new Blog post' })
   @ApiResponse({ status: 201, description: 'Post created successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 403, description: 'A conflict occured, passed data are conflicting with existing ones.' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @Post()
   public createPost(@Body() createPostDTO: CreatePostDTO) {
