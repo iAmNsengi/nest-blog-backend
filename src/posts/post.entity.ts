@@ -50,7 +50,8 @@ export class Post {
 
   // create a one to one relationship to metaoption entity
   @OneToOne(() => MetaOption, {
-    cascade: true
+    cascade: true,
+    eager: true
   })
   @JoinColumn()
   metaOptions?: MetaOption;

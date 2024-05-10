@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
-  Post
+  Post,
+  Query
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -43,7 +45,11 @@ export class PostsController {
   @ApiOperation({ summary: 'Create a new Blog post' })
   @ApiResponse({ status: 201, description: 'Post created successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  @ApiResponse({ status: 403, description: 'A conflict occured, passed data are conflicting with existing ones.' })
+  @ApiResponse({
+    status: 403,
+    description:
+      'A conflict occured, passed data are conflicting with existing ones.'
+  })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @Post()
   public createPost(@Body() createPostDTO: CreatePostDTO) {
@@ -58,5 +64,17 @@ export class PostsController {
   public updatePost(@Body() patchPostDTO: PatchPostDTO) {
     console.log('Patch post DTO');
     return patchPostDTO;
+  }
+
+  @ApiOperation({ summary: 'Delete post by id' })
+  @Delete()
+  public deletePost(
+    @Query(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })
+    )
+    id: number
+  ) {
+    return this.postService.delete(id);
   }
 }
