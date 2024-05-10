@@ -19,21 +19,16 @@ export class PostsService {
     const postExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
     });
+
     if (postExist)
       throw new HttpException(
         'Post with given title already exists',
         HttpStatus.BAD_REQUEST
       );
-    const metaOptions = createPostDTO.metaOptions
-      ? this.metaOptionsRepository.create(createPostDTO.metaOptions)
-      : null;
-
-    if (metaOptions) await this.metaOptionsRepository.save(metaOptions);
 
     const post = this.postRepository.create({
       ...createPostDTO,
-      tags: createPostDTO.tags ? createPostDTO.tags.join(', ') : '',
-      metaOptions
+      tags: createPostDTO.tags ? createPostDTO.tags.join(', ') : ''
     });
     return await this.postRepository.save(post);
   }
