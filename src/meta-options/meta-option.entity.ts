@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
@@ -27,5 +28,6 @@ export class MetaOption {
   deletedAt: Date;
 
   @OneToOne(() => Post, (post) => post.metaOptions)
+  @JoinColumn()
   post: Post;
 }
