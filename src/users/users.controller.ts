@@ -3,6 +3,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -26,32 +27,20 @@ export class UsersController {
 
   @Get('/:id?')
   @ApiOperation({
-    summary: 'Fetches a list of registered users on the application'
+    summary: 'Get one user by id'
   })
   @ApiResponse({
     status: 200,
-    description: 'Users fetched successfully'
+    description: 'User fetched successfully'
   })
-  @ApiQuery({
-    name: 'limit',
-    type: 'number',
-    required: false,
-    description: 'Limit of values',
-    default: 10
-  })
-  @ApiQuery({
-    name: 'page',
-    type: 'number',
-    required: false,
-    description: 'Limit of pages you want',
-    default: 1
-  })
-  getUsers(
-    @Param() getUserParamDTO?: GetUsersParamDTO,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number
+  public findOneById(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })
+    )
+    id: number
   ) {
-    return this.userService.findOneById(getUserParamDTO, limit, page);
+    return this.userService.findOneById(id);
   }
 
   @Post('')
