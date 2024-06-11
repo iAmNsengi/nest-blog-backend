@@ -6,6 +6,7 @@ import { CreatePostDTO } from './dtos/create-post.dto';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { create } from 'domain';
 import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/providers/users.services';
 
 @Injectable()
 export class PostsService {
@@ -14,8 +15,11 @@ export class PostsService {
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
     @InjectRepository(MetaOption)
-    private readonly metaOptionsRepository: Repository<MetaOption>
+    private readonly metaOptionsRepository: Repository<MetaOption>,
+
+    private readonly usersService: UsersService
   ) {}
+
   public async createPost(createPostDTO: CreatePostDTO) {
     const postExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
@@ -26,11 +30,12 @@ export class PostsService {
         'Post with given title already exists',
         HttpStatus.CONFLICT
       );
-    // const author = this.
+    const author = await this.usersService.findOneById(createPostDTO.authorId);
 
     const post = this.postRepository.create({
       ...createPostDTO,
-      tags: createPostDTO.tags ? createPostDTO.tags.join(', ') : ''
+      author,
+      tags: createPostDTO.tags.join(', ') ?? ''
     });
     return await this.postRepository.save(post);
   }

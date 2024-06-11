@@ -52,7 +52,7 @@ export class CreatePostDTO {
   @MaxLength(256)
   slug: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'draft' })
   @IsEnum(postStatus)
   status: postStatus;
 
@@ -109,8 +109,7 @@ export class CreatePostDTO {
       properties: {
         metaValue: {
           type: 'string',
-          description: 'The meta value is a JSON string',
-          example: '{"sidebarEnabled":true}'
+          description: 'The meta value is a JSON string'
         }
       }
     }

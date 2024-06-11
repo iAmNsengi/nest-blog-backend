@@ -28,7 +28,13 @@ export class UsersService {
   ) {}
 
   public async findOneById(id: number) {
-    return await this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user)
+      throw new HttpException(
+        'User with given id was not found!',
+        HttpStatus.BAD_REQUEST
+      );
+    return user;
   }
 
   public async findAll() {
