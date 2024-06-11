@@ -19,6 +19,11 @@ import RegexCraft from 'regexcraft';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  @Get()
+  public getAllUsers() {
+    return this.userService.findAll();
+  }
+
   @Get('/:id?')
   @ApiOperation({
     summary: 'Fetches a list of registered users on the application'
@@ -46,7 +51,7 @@ export class UsersController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number
   ) {
-    return this.userService.findAll(getUserParamDTO, limit, page);
+    return this.userService.findOneById(getUserParamDTO, limit, page);
   }
 
   @Post('')

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDTO } from './dtos/create-post.dto';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { create } from 'domain';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class PostsService {
@@ -25,6 +26,7 @@ export class PostsService {
         'Post with given title already exists',
         HttpStatus.CONFLICT
       );
+    // const author = this.
 
     const post = this.postRepository.create({
       ...createPostDTO,

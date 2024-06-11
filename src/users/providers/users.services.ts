@@ -18,23 +18,17 @@ import { CreateUserDTO } from '../dtos/create-user.dto';
  */
 @Injectable()
 export class UsersService {
-  /**
-   * Constructor
-   */
+  /** Constructor */
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
 
-    /**
-     * Injecting UserRepository
-     */
+    /** Injecting UserRepository*/
     @InjectRepository(User)
     private usersRepository: Repository<User>
   ) {}
-  /**
-   * Method to find all users
-   */
-  public findAll(
+  /** Method to find all users */
+  public findOneById(
     getUserParamDTO: GetUsersParamDTO,
     limit: number,
     page: number
@@ -47,26 +41,12 @@ export class UsersService {
       {
         firstName: 'John',
         email: 'john@gmail.com'
-      },
-      {
-        firstName: 'Karera',
-        email: 'karera@gmail.com'
-      },
-      {
-        firstName: 'Johnson',
-        email: 'johnson@gmail.com'
       }
     ];
   }
-  /**
-   * Find user by ID
-   */
-  public findOneByID(id: number) {
-    return {
-      firstName: 'John',
-      email: 'john@gmail.com',
-      id: 1
-    };
+  /** Find user by ID */
+  public async findAll() {
+    return await this.usersRepository.find();
   }
 
   public async createUser(createUserDTO: CreateUserDTO) {
