@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
@@ -8,7 +8,7 @@ export class UsersController {
   }
 
   @Post()
-  addUser() {
-    return 'You are on add user endpoint';
+  addUser(@Body() body: any) {
+    return body;
   }
 }
