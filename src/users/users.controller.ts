@@ -1,29 +1,25 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Get,
   Param,
-  Post,
-  ValidationPipe
+  ParseIntPipe,
+  Query
 } from '@nestjs/common';
-import { CreateUserDTO } from './dtos/create-user.dto';
+import { UsersService } from './providers/users.services';
 import { GetUsersParamDTO } from './dtos/get-users-params.dto';
 
 @Controller('users')
 export class UsersController {
-  @Get()
-  getAllUsers() {
-    return 'You are on get all users endpoint';
-  }
+  constructor(private readonly userService: UsersService) {}
 
-  @Get('/:id')
-  public getUserById(@Param() getUserParamDto: GetUsersParamDTO) {
-    console.log(getUserParamDto);
-
-    return 'You sent a get request to get user by Id';
-  }
-  @Post()
-  addUser(@Body() createUserDTO: CreateUserDTO) {
-    return createUserDTO;
+  @Get('/:id?')
+  getUsers(
+    @Param() getUserParamDTO?: GetUsersParamDTO,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number
+  ) {
+    return this.userService.findAll(getUserParamDTO, limit, page);
   }
 }
