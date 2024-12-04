@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { GetUsersParamDTO } from '../dtos/get-users-params.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { log } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,8 @@ export class UsersService {
     page: number
   ) {
     console.log(getUserParamDTO);
+    const isAuth = this.authService.isAuth();
+    console.log(isAuth);
 
     return [
       {

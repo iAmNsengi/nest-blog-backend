@@ -14,4 +14,8 @@ export class AuthService {
 
     return 'SAMPLE_TOKEN';
   }
+
+  public isAuth() {
+    return 'I am logged in!';
+  }
 }
