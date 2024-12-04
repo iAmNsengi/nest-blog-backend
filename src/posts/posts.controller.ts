@@ -20,6 +20,6 @@ export class PostsController {
 
   @Post()
   public createPost(@Body() createPostDTO: CreatePostDTO) {
-    return 'Create Post end point';
+    return this.postService.createPost(createPostDTO);
   }
 }
