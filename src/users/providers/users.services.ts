@@ -1,10 +1,4 @@
-import {
-  DefaultValuePipe,
-  Injectable,
-  Param,
-  ParseIntPipe,
-  Query
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { GetUsersParamDTO } from '../dtos/get-users-params.dto';
 
 @Injectable()
@@ -30,5 +24,13 @@ export class UsersService {
         email: 'johnson@gmail.com'
       }
     ];
+  }
+
+  public findOneByID(id: number) {
+    return {
+      firstName: 'John',
+      email: 'john@gmail.com',
+      id: 1
+    };
   }
 }
