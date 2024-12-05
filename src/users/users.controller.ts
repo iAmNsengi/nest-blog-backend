@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
@@ -10,6 +11,8 @@ import {
 import { UsersService } from './providers/users.services';
 import { GetUsersParamDTO } from './dtos/get-users-params.dto';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateUserDTO } from './dtos/create-user.dto';
+import RegexCraft from 'regexcraft';
 
 @ApiTags('Users')
 @Controller('users')
@@ -47,7 +50,23 @@ export class UsersController {
   }
 
   @Post('')
-  public createUser() {
-    return 'create User endpoint';
+  @ApiOperation({ description: 'Create a new User' })
+  @ApiResponse({ status: 200, description: 'User created successfully' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request, data provided has issues'
+  })
+  @ApiResponse({ status: 500, description: 'An internal server error occured' })
+  public createUser(@Body() createUserDTO: CreateUserDTO) {
+    console.log(
+      new RegexCraft()
+        .hasLengthBetween(8, 96)
+        .hasLetter(1)
+        .hasNumber(1)
+        .hasSpecialCharacter(1)
+        .build(),
+      '--------------'
+    );
+    return this.userService.createUser(createUserDTO);
   }
 }
