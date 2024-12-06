@@ -106,22 +106,16 @@ export class CreatePostDTO {
     items: {
       type: 'object',
       properties: {
-        key: {
-          type: 'string',
-          description: 'The key can be any string identifier for meta option',
-          example: 'sidebarEnabled'
-        },
-        value: {
-          type: 'any',
-          description: 'The value can be anything',
-          example: true
+        metaValue: {
+          type: 'json',
+          description: 'The meta value is a JSON string',
+          example: '{"sidebarEnabled":true}'
         }
       }
     }
   })
   @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDTO)
-  metaOptions: [CreatePostMetaOptionsDTO];
+  metaOptions?: CreatePostMetaOptionsDTO | null;
 }
