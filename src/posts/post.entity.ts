@@ -1,7 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CreatePostMetaOptionsDTO } from './dtos/create-post-meta-options.dto';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm';
+import { CreatePostMetaOptionsDTO } from '../meta-options/dtos/create-post-meta-options.dto';
 import { postStatus } from './enums/post-status.enum';
 import { postType } from './enums/post-type.enum';
+import { MetaOption } from 'src/meta-options/meta-option.entity';
 
 @Entity()
 export class Post {
@@ -31,20 +38,22 @@ export class Post {
   status: postStatus;
 
   @Column({ type: 'text', nullable: true })
-  content: string;
+  content?: string;
 
   @Column({ type: 'text', nullable: true })
-  schema: string;
+  schema?: string;
 
   @Column({ type: 'varchar', length: 1024, nullable: true })
   featuredImageUrl?: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  publishedOn: Date;
+  publishedOn?: Date;
+
+  // create a one to one relationship to metaoption entity
+  @OneToOne(() => MetaOption)
+  @JoinColumn()
+  metaOptions?: MetaOption;
 
   @Column()
-  tags: string[];
-
-  @Column()
-  metaOptions: [CreatePostMetaOptionsDTO];
+  tags: string;
 }
