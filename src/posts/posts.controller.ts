@@ -9,17 +9,22 @@ import { PatchPostDTO } from './dtos/patch-post.dto';
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
 
+  @ApiOperation({ summary: 'Get all posts' })
+  @ApiResponse({ status: 200, description: 'Posts retrieved successfully' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @Get()
   public getAllPosts() {
     return 'Get post request';
   }
-
+  @ApiOperation({ summary: 'Get post by ID' })
+  @ApiResponse({ status: 200, description: 'Post retrieved successfully' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @Get(':/id')
   public getPost() {
     return 'Get single post';
   }
 
-  @ApiOperation({ description: 'Create a new Blog post' })
+  @ApiOperation({ summary: 'Create a new Blog post' })
   @ApiResponse({ status: 201, description: 'Post created successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
@@ -28,7 +33,7 @@ export class PostsController {
     return this.postService.createPost(createPostDTO);
   }
 
-  @ApiOperation({ description: 'Updates the content of a post' })
+  @ApiOperation({ summary: 'Updates the content of a post' })
   @ApiResponse({ status: 200, description: 'Post updated successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error occured' })
