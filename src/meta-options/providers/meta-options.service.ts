@@ -20,4 +20,8 @@ export class MetaOptionsService {
     );
     return await this.metaOptionsRepository.save(metaOption);
   }
+
+  public async getAll() {
+    return await this.metaOptionsRepository.find();
+  }
 }
