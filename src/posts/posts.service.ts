@@ -53,13 +53,7 @@ export class PostsService {
         'Post with given id was not found',
         HttpStatus.BAD_REQUEST
       );
-    console.log(post);
-
-    // deleting the post
     await this.postRepository.delete(id);
-    // delete the metaOptions
-    await this.metaOptionsRepository.delete(post.metaOptions.id);
-    // send confirmation to the user
     return { deleted: true, id: post.id };
   }
 }
