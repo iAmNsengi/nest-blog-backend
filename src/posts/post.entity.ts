@@ -49,7 +49,10 @@ export class Post {
   publishedOn?: Date;
 
   // create a one to one relationship to metaoption entity
-  @OneToOne(() => MetaOption)
+  @OneToOne(() => MetaOption, {
+    cascade: true,
+    eager: true
+  })
   @JoinColumn()
   metaOptions?: MetaOption;
 

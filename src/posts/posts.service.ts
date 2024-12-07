@@ -19,27 +19,22 @@ export class PostsService {
     const postExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
     });
+
     if (postExist)
       throw new HttpException(
         'Post with given title already exists',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.CONFLICT
       );
-    const metaOptions = createPostDTO.metaOptions
-      ? this.metaOptionsRepository.create(createPostDTO.metaOptions)
-      : null;
-
-    if (metaOptions) await this.metaOptionsRepository.save(metaOptions);
 
     const post = this.postRepository.create({
       ...createPostDTO,
-      tags: createPostDTO.tags ? createPostDTO.tags.join(', ') : '',
-      metaOptions
+      tags: createPostDTO.tags ? createPostDTO.tags.join(', ') : ''
     });
     return await this.postRepository.save(post);
   }
 
   public async getAll() {
-    return await this.postRepository.find();
+    return await this.postRepository.find({ relations: { metaOptions: true } });
   }
 
   public async getPostById(id: number) {
@@ -47,7 +42,24 @@ export class PostsService {
     if (post) return post;
     return new HttpException(
       'Post with given ID was not found',
-      HttpStatus.NOT_FOUND
+      HttpStatus.BAD_REQUEST
     );
+  }
+
+  public async delete(id: number) {
+    const post = await this.postRepository.findOne({ where: { id } });
+    if (!post)
+      throw new HttpException(
+        'Post with given id was not found',
+        HttpStatus.BAD_REQUEST
+      );
+    console.log(post);
+
+    // deleting the post
+    await this.postRepository.delete(id);
+    // delete the metaOptions
+    await this.metaOptionsRepository.delete(post.metaOptions.id);
+    // send confirmation to the user
+    return { deleted: true, id: post.id };
   }
 }
