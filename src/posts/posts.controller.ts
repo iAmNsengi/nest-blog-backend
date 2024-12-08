@@ -62,8 +62,7 @@ export class PostsController {
   @ApiResponse({ status: 500, description: 'Internal server error occured' })
   @Patch()
   public updatePost(@Body() patchPostDTO: PatchPostDTO) {
-    console.log('Patch post DTO');
-    return patchPostDTO;
+    return this.postService.updatePost(patchPostDTO);
   }
 
   @ApiOperation({ summary: 'Delete post by id' })
