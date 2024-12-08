@@ -1,8 +1,11 @@
+import { Post } from 'src/posts/post.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
@@ -26,6 +29,10 @@ export class Tag {
 
   @Column({ type: 'varchar', length: 1024, nullable: true })
   featuredImage?: string;
+
+  @ManyToMany(() => Post, (post) => post.tags, { cascade: true })
+  @JoinTable()
+  posts: Post;
 
   @CreateDateColumn()
   createdAt: Date;
