@@ -18,59 +18,30 @@ import { CreateUserDTO } from '../dtos/create-user.dto';
  */
 @Injectable()
 export class UsersService {
-  /**
-   * Constructor
-   */
+  /** Constructor */
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
 
-    /**
-     * Injecting UserRepository
-     */
     @InjectRepository(User)
     private usersRepository: Repository<User>
   ) {}
-  /**
-   * Method to find all users
-   */
-  public findAll(
-    getUserParamDTO: GetUsersParamDTO,
-    limit: number,
-    page: number
-  ) {
-    console.log(getUserParamDTO);
-    const isAuth = this.authService.isAuth();
-    console.log(isAuth);
 
-    return [
-      {
-        firstName: 'John',
-        email: 'john@gmail.com'
-      },
-      {
-        firstName: 'Karera',
-        email: 'karera@gmail.com'
-      },
-      {
-        firstName: 'Johnson',
-        email: 'johnson@gmail.com'
-      }
-    ];
+  public async findOneById(id: number) {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user)
+      throw new HttpException(
+        'User with given id was not found!',
+        HttpStatus.BAD_REQUEST
+      );
+    return user;
   }
-  /**
-   * Find user by ID
-   */
-  public findOneByID(id: number) {
-    return {
-      firstName: 'John',
-      email: 'john@gmail.com',
-      id: 1
-    };
+
+  public async findAll() {
+    return await this.usersRepository.find();
   }
 
   public async createUser(createUserDTO: CreateUserDTO) {
-    // check if user exists with the same email
     const existingUser = await this.usersRepository.findOne({
       where: {
         email: createUserDTO.email
@@ -82,9 +53,8 @@ export class UsersService {
         HttpStatus.BAD_REQUEST
       );
 
-    let newUser = this.usersRepository.create(createUserDTO);
+    const newUser = this.usersRepository.create(createUserDTO);
 
-    newUser = await this.usersRepository.save(newUser);
-    return newUser;
+    return await this.usersRepository.save(newUser);
   }
 }

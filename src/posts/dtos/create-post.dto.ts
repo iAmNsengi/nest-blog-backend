@@ -1,9 +1,11 @@
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
@@ -50,7 +52,7 @@ export class CreatePostDTO {
   @MaxLength(256)
   slug: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'draft' })
   @IsEnum(postStatus)
   status: postStatus;
 
@@ -107,8 +109,7 @@ export class CreatePostDTO {
       properties: {
         metaValue: {
           type: 'string',
-          description: 'The meta value is a JSON string',
-          example: '{"sidebarEnabled":true}'
+          description: 'The meta value is a JSON string'
         }
       }
     }
@@ -117,4 +118,13 @@ export class CreatePostDTO {
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDTO)
   metaOptions?: CreatePostMetaOptionsDTO | null;
+
+  @ApiProperty({
+    type: 'integer',
+    nullable: false,
+    example: 1
+  })
+  @IsNotEmpty()
+  @IsInt()
+  authorId: number;
 }
