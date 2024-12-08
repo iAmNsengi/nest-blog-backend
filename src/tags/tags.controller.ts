@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query
+} from '@nestjs/common';
 import { CreateTagDTO } from './dtos/create-tag.dto';
 import { TagsService } from './tags.service';
 import { ApiOperation } from '@nestjs/swagger';
@@ -17,5 +27,17 @@ export class TagsController {
   @ApiOperation({ summary: 'Create a new tag' })
   public createTag(@Body() createTagDTO: CreateTagDTO) {
     return this.tagService.createTag(createTagDTO);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'Delete a post by id' })
+  public deleteTag(
+    @Query(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })
+    )
+    id: number
+  ) {
+    return this.tagService.deleteTag(id);
   }
 }

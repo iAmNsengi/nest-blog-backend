@@ -30,7 +30,7 @@ export class Tag {
   @Column({ type: 'varchar', length: 1024, nullable: true })
   featuredImage?: string;
 
-  @ManyToMany(() => Post, (post) => post.tags, { cascade: true })
+  @ManyToMany(() => Post, (post) => post.tags)
   @JoinTable()
   posts: Post;
 
