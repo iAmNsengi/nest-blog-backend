@@ -41,7 +41,9 @@ export class PostsService {
   }
 
   public async getAll() {
-    return await this.postRepository.find({ relations: { metaOptions: true } });
+    return await this.postRepository.find({
+      relations: { metaOptions: true, author: true }
+    });
   }
 
   public async getPostById(id: number) {
