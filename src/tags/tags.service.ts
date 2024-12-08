@@ -36,9 +36,18 @@ export class TagsService {
         'Tag with given id was not found',
         HttpStatus.BAD_REQUEST
       );
-    console.log(tagFound);
-
     await this.tagsRepository.delete(tagFound.id);
     return { deleted: true, id: tagFound.id };
+  }
+
+  public async softRemove(id: number) {
+    const tagFound = await this.tagsRepository.findOneBy({ id });
+    if (!tagFound)
+      throw new HttpException(
+        'Tag with given id was not found',
+        HttpStatus.BAD_REQUEST
+      );
+    const deletedTag = await this.tagsRepository.softDelete(tagFound.id);
+    return { deleted: true, deletedTag };
   }
 }
