@@ -41,6 +41,7 @@ export class PostsService {
       author,
       tags
     });
+
     return await this.postRepository.save(post);
   }
 

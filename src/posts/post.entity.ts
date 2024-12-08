@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToOne,
@@ -59,8 +60,8 @@ export class Post {
   })
   metaOptions?: MetaOption;
 
-  @ManyToMany(() => Tag)
-  @JoinColumn()
+  @ManyToMany(() => Tag, (tag) => tag.id, { cascade: true })
+  @JoinTable()
   tags: Tag[];
 
   @ManyToOne(() => User, (user) => user.posts)
