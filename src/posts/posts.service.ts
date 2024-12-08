@@ -7,6 +7,7 @@ import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { create } from 'domain';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/providers/users.services';
+import { TagsService } from 'src/tags/tags.service';
 
 @Injectable()
 export class PostsService {
@@ -17,7 +18,9 @@ export class PostsService {
     @InjectRepository(MetaOption)
     private readonly metaOptionsRepository: Repository<MetaOption>,
 
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+
+    private readonly tagsService: TagsService
   ) {}
 
   public async createPost(createPostDTO: CreatePostDTO) {
@@ -31,11 +34,12 @@ export class PostsService {
         HttpStatus.CONFLICT
       );
     const author = await this.usersService.findOneById(createPostDTO.authorId);
+    const tags = await this.tagsService.findMultipleTags(createPostDTO.tags);
 
     const post = this.postRepository.create({
       ...createPostDTO,
       author,
-      tags: createPostDTO.tags.join(', ') ?? ''
+      tags
     });
     return await this.postRepository.save(post);
   }
