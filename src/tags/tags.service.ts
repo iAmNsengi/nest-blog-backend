@@ -21,8 +21,6 @@ export class TagsService {
         id: In(tags)
       }
     });
-    console.log(tagsFound);
-
     return tagsFound;
   }
 
