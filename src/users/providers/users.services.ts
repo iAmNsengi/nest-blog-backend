@@ -12,6 +12,8 @@ import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from '../dtos/create-user.dto';
+import { ConfigType } from '@nestjs/config';
+import profileConfig from '../config/profileConfig';
 
 /**
  * Class to connect to users table and perform business logics
@@ -24,7 +26,10 @@ export class UsersService {
     private readonly authService: AuthService,
 
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
+
+    @Inject(profileConfig.KEY)
+    private readonly profileConfiguration: ConfigType<typeof profileConfig>
   ) {}
 
   public async findOneById(id: number) {
@@ -38,6 +43,8 @@ export class UsersService {
   }
 
   public async findAll() {
+    console.log(this.profileConfiguration.API_KEY);
+
     return await this.usersRepository.find();
   }
 

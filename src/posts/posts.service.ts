@@ -12,7 +12,6 @@ import { UsersService } from 'src/users/providers/users.services';
 import { TagsService } from 'src/tags/tags.service';
 import { PatchPostDTO } from './dtos/patch-post.dto';
 import { ConfigService } from '@nestjs/config';
-import { log } from 'console';
 
 @Injectable()
 export class PostsService {
