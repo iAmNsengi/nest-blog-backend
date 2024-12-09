@@ -8,5 +8,6 @@ export default Joi.object({
   DATABASE_NAME: Joi.string().required(),
   DATABASE_HOST: Joi.string().default('localhost'),
   DATABASE_USER: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required()
+  DATABASE_PASSWORD: Joi.string().required(),
+  PROFILE_API_KEY: Joi.string().required()
 });
