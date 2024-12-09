@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +11,7 @@ import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.services';
 import { TagsService } from 'src/tags/tags.service';
 import { PatchPostDTO } from './dtos/patch-post.dto';
+import { ConfigService } from '@nestjs/config';
 import { log } from 'console';
 
 @Injectable()
@@ -20,7 +25,9 @@ export class PostsService {
 
     private readonly usersService: UsersService,
 
-    private readonly tagsService: TagsService
+    private readonly tagsService: TagsService,
+    /** Injecting config service */
+    private readonly configService: ConfigService
   ) {}
 
   public async createPost(createPostDTO: CreatePostDTO) {
@@ -29,10 +36,7 @@ export class PostsService {
     });
 
     if (postExist)
-      throw new HttpException(
-        'Post with given title already exists',
-        HttpStatus.CONFLICT
-      );
+      throw new ConflictException('Post with given title already exists');
     const author = await this.usersService.findOneById(createPostDTO.authorId);
     const tags = await this.tagsService.findMultipleTags(createPostDTO.tags);
 
@@ -46,6 +50,8 @@ export class PostsService {
   }
 
   public async getAll() {
+    console.log(this.configService.get('S3_BUCKET'));
+
     return await this.postRepository.find({
       relations: { metaOptions: true, author: true, tags: true }
     });
@@ -54,10 +60,7 @@ export class PostsService {
   public async getPostById(id: number) {
     const post = await this.postRepository.findOne({ where: { id } });
     if (post) return post;
-    return new HttpException(
-      'Post with given ID was not found',
-      HttpStatus.BAD_REQUEST
-    );
+    return new ConflictException('Post with given ID was not found');
   }
   public async updatePost(patchPostDTO: PatchPostDTO) {
     const post = await this.postRepository.findOneBy({ id: patchPostDTO.id });
@@ -71,10 +74,7 @@ export class PostsService {
         slug: patchPostDTO.slug
       });
       if (slugExist)
-        throw new HttpException(
-          'Post with provided slug already exists',
-          HttpStatus.CONFLICT
-        );
+        throw new ConflictException('Post with provided slug already exists');
       post.slug = patchPostDTO.slug ?? post.slug;
     }
 
@@ -91,11 +91,7 @@ export class PostsService {
 
   public async delete(id: number) {
     const post = await this.postRepository.findOne({ where: { id } });
-    if (!post)
-      throw new HttpException(
-        'Post with given id was not found',
-        HttpStatus.BAD_REQUEST
-      );
+    if (!post) throw new NotFoundException('Post with given id was not found');
     await this.postRepository.delete(id);
     return { deleted: true, id: post.id };
   }

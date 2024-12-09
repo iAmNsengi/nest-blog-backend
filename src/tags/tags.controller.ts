@@ -40,4 +40,15 @@ export class TagsController {
   ) {
     return this.tagService.deleteTag(id);
   }
+
+  @Delete('soft-delete')
+  public async softDelete(
+    @Query(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })
+    )
+    id: number
+  ) {
+    return this.tagService.softRemove(id);
+  }
 }
