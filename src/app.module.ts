@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagsModule } from './tags/tags.module';
 import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { appConfig } from './config/app.config';
 
 const ENV = process.env.NODE_ENV;
 
@@ -19,7 +20,8 @@ const ENV = process.env.NODE_ENV;
     ConfigModule.forRoot({
       isGlobal: true,
       // envFilePath: ['.env.development']
-      envFilePath: !ENV ? '.env' : `.env.${ENV}`
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      load: [appConfig]
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -27,13 +29,13 @@ const ENV = process.env.NODE_ENV;
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         // entities: [User],
-        autoLoadEntities: true,
-        synchronize: true,
-        port: configService.get('DATABASE_PORT'),
-        username: configService.get('DATABASE_USER'),
-        password: configService.get('DATABASE_PASSWORD'),
-        host: configService.get('DATABASE_HOST'),
-        database: configService.get('DATABASE_NAME')
+        autoLoadEntities: configService.get('database.autoLoadEntities'),
+        synchronize: configService.get('database.synchronize'),
+        port: +configService.get('database.port'),
+        username: configService.get('database.user'),
+        password: configService.get('database.password'),
+        host: configService.get('database.host'),
+        database: configService.get('database.name')
       })
     }),
     TagsModule,
