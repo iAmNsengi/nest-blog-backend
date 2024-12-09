@@ -11,6 +11,8 @@ import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.services';
 import { TagsService } from 'src/tags/tags.service';
 import { PatchPostDTO } from './dtos/patch-post.dto';
+import { ConfigService } from '@nestjs/config';
+import { log } from 'console';
 
 @Injectable()
 export class PostsService {
@@ -23,7 +25,9 @@ export class PostsService {
 
     private readonly usersService: UsersService,
 
-    private readonly tagsService: TagsService
+    private readonly tagsService: TagsService,
+    /** Injecting config service */
+    private readonly configService: ConfigService
   ) {}
 
   public async createPost(createPostDTO: CreatePostDTO) {
@@ -46,6 +50,8 @@ export class PostsService {
   }
 
   public async getAll() {
+    console.log(this.configService.get('S3_BUCKET'));
+
     return await this.postRepository.find({
       relations: { metaOptions: true, author: true, tags: true }
     });

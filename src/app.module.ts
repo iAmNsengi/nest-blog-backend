@@ -14,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule,
     PostsModule,
     AuthModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env.development'] }),
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
