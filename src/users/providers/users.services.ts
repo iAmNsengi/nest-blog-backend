@@ -36,24 +36,13 @@ export class UsersService {
   ) {}
 
   public async findOneById(id: number) {
-    let user = undefined;
+    let users = undefined;
     try {
-      user = await this.usersRepository.findOneBy({ id });
+      users = await this.usersRepository.find();
     } catch (error) {
       requestTimeoutError();
     }
-    if (!user)
-      throw new HttpException(
-        'User with given id was not found!',
-        HttpStatus.BAD_REQUEST
-      );
-    return user;
-  }
-
-  public async findAll() {
-    console.log(this.profileConfiguration.API_KEY);
-
-    return await this.usersRepository.find();
+    return users;
   }
 
   public async createUser(createUserDTO: CreateUserDTO) {
@@ -70,8 +59,12 @@ export class UsersService {
     if (userExists)
       throw new BadRequestException('User with email already exists');
 
-    const newUser = this.usersRepository.create(createUserDTO);
-
-    return await this.usersRepository.save(newUser);
+    let newUser = this.usersRepository.create(createUserDTO);
+    try {
+      await this.usersRepository.save(newUser);
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return newUser;
   }
 }
