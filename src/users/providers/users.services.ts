@@ -16,6 +16,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { ConfigType } from '@nestjs/config';
 import profileConfig from '../config/profileConfig';
+import requestTimeoutError from 'src/errors/RequestTimeout';
 
 /**
  * Class to connect to users table and perform business logics
@@ -34,20 +35,24 @@ export class UsersService {
     private readonly profileConfiguration: ConfigType<typeof profileConfig>
   ) {}
 
-  public async findOneById(id: number) {
-    const user = await this.usersRepository.findOneBy({ id });
-    if (!user)
-      throw new HttpException(
-        'User with given id was not found!',
-        HttpStatus.BAD_REQUEST
-      );
-    return user;
+  public async findAll() {
+    let users = undefined;
+    try {
+      users = this.usersRepository.find();
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return users;
   }
 
-  public async findAll() {
-    console.log(this.profileConfiguration.API_KEY);
-
-    return await this.usersRepository.find();
+  public async findOneById(id: number) {
+    let users = undefined;
+    try {
+      users = await this.usersRepository.find();
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return users;
   }
 
   public async createUser(createUserDTO: CreateUserDTO) {
@@ -59,16 +64,17 @@ export class UsersService {
         }
       });
     } catch (error) {
-      throw new RequestTimeoutException(
-        "Couldn't process your request at the moment",
-        { description: 'Error connecting to the database1' }
-      );
+      requestTimeoutError();
     }
     if (userExists)
       throw new BadRequestException('User with email already exists');
 
-    const newUser = this.usersRepository.create(createUserDTO);
-
-    return await this.usersRepository.save(newUser);
+    let newUser = this.usersRepository.create(createUserDTO);
+    try {
+      await this.usersRepository.save(newUser);
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return newUser;
   }
 }
