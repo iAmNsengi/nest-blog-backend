@@ -16,6 +16,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { ConfigType } from '@nestjs/config';
 import profileConfig from '../config/profileConfig';
+import requestTimeoutError from 'src/errors/RequestTimeout';
 
 /**
  * Class to connect to users table and perform business logics
@@ -35,7 +36,12 @@ export class UsersService {
   ) {}
 
   public async findOneById(id: number) {
-    const user = await this.usersRepository.findOneBy({ id });
+    let user = undefined;
+    try {
+      user = await this.usersRepository.findOneBy({ id });
+    } catch (error) {
+      requestTimeoutError();
+    }
     if (!user)
       throw new HttpException(
         'User with given id was not found!',
@@ -59,10 +65,7 @@ export class UsersService {
         }
       });
     } catch (error) {
-      throw new RequestTimeoutException(
-        "Couldn't process your request at the moment",
-        { description: 'Error connecting to the database1' }
-      );
+      requestTimeoutError();
     }
     if (userExists)
       throw new BadRequestException('User with email already exists');
