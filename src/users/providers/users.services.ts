@@ -35,6 +35,16 @@ export class UsersService {
     private readonly profileConfiguration: ConfigType<typeof profileConfig>
   ) {}
 
+  public async findAll() {
+    let users = undefined;
+    try {
+      users = this.usersRepository.find();
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return users;
+  }
+
   public async findOneById(id: number) {
     let users = undefined;
     try {
