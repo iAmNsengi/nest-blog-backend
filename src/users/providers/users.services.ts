@@ -13,6 +13,8 @@ import { CreateUserDTO } from '../dtos/create-user.dto';
 import { ConfigType } from '@nestjs/config';
 import profileConfig from '../config/profileConfig';
 import requestTimeoutError from 'src/errors/RequestTimeout';
+import { UsersCreateManyProvider } from './users-create-many.provider';
+import { create } from 'domain';
 
 /**
  * Class to connect to users table and perform business logics
@@ -30,8 +32,8 @@ export class UsersService {
     @Inject(profileConfig.KEY)
     private readonly profileConfiguration: ConfigType<typeof profileConfig>,
 
-    /** Injecting data source */
-    private readonly dataSource: DataSource
+    /** Injecting user  create many provider */
+    private readonly usersCreateManyProvider: UsersCreateManyProvider
   ) {}
 
   public async findAll() {
@@ -78,5 +80,7 @@ export class UsersService {
     return newUser;
   }
 
-  
+  public async createMany(createUsersDTO: CreateUserDTO[]) {
+    return await this.usersCreateManyProvider.createManyUsers(createUsersDTO);
+  }
 }

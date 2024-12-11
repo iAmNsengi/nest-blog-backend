@@ -31,5 +31,7 @@ export class UsersCreateManyProvider {
       // release back the connection
       await queryRunner.release();
     }
+
+    return newUsers;
   }
 }
