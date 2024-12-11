@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException
+} from '@nestjs/common';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { User } from '../user.entity';
 import { DataSource } from 'typeorm';
@@ -13,24 +17,33 @@ export class UsersCreateManyProvider {
     const queryRunner = this.dataSource.createQueryRunner();
     // connect query runner to our data source
     await queryRunner.connect();
+
     // start transaction
-    await queryRunner.startTransaction();
+    try {
+      await queryRunner.startTransaction();
+    } catch (error) {
+      throw new InternalServerErrorException("Couldn't start transaction");
+    }
 
     try {
       for (let user of createUsersDTO) {
         let newUser = queryRunner.manager.create(User, user);
         let result = await queryRunner.manager.save(newUser);
         newUsers.push(result);
+
         // if successful commit the transaction
-        await queryRunner.commitTransaction();
+        let trans = await queryRunner.commitTransaction();
+        console.log(trans);
       }
     } catch (error) {
-      // if transaction unsuccessful rollback
+      //    unsuccessful rollback
       await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(error);
     } finally {
       // release back the connection
       await queryRunner.release();
     }
+    console.log(newUsers);
 
     return newUsers;
   }

@@ -52,7 +52,7 @@ export class UsersController {
     return this.userService.createUser(createUserDTO);
   }
 
-  @Post('')
+  @Post('/create-many')
   @ApiOperation({ description: 'Create many users' })
   public createManyUsers(@Body() createUsersDTO: CreateUserDTO[]) {
     return this.userService.createMany(createUsersDTO);

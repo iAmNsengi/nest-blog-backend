@@ -6,15 +6,12 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from '../dtos/create-user.dto';
-import { ConfigType } from '@nestjs/config';
-import profileConfig from '../config/profileConfig';
 import requestTimeoutError from 'src/errors/RequestTimeout';
 import { UsersCreateManyProvider } from './users-create-many.provider';
-import { create } from 'domain';
 
 /**
  * Class to connect to users table and perform business logics
@@ -28,9 +25,6 @@ export class UsersService {
 
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-
-    @Inject(profileConfig.KEY)
-    private readonly profileConfiguration: ConfigType<typeof profileConfig>,
 
     /** Injecting user  create many provider */
     private readonly usersCreateManyProvider: UsersCreateManyProvider
