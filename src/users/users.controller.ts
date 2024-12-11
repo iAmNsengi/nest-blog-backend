@@ -34,10 +34,7 @@ export class UsersController {
     description: 'User fetched successfully'
   })
   public findOneById(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })
-    )
+    @Param('id', ParseIntPipe)
     id: number
   ) {
     return this.userService.findOneById(id);

@@ -31,7 +31,6 @@ export class Tag {
   featuredImage?: string;
 
   @ManyToMany(() => Post, (post) => post.tags)
-  @JoinTable()
   posts: Post;
 
   @CreateDateColumn()

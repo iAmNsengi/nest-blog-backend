@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +13,8 @@ import { UsersService } from 'src/users/providers/users.services';
 import { TagsService } from 'src/tags/tags.service';
 import { PatchPostDTO } from './dtos/patch-post.dto';
 import { ConfigService } from '@nestjs/config';
+import { GetUsersParamDTO } from 'src/users/dtos/get-users-params.dto';
+import requestTimeoutError from 'src/errors/RequestTimeout';
 
 @Injectable()
 export class PostsService {
@@ -33,27 +36,37 @@ export class PostsService {
     const postExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
     });
+    let tags = undefined;
 
     if (postExist)
-      throw new ConflictException('Post with given title already exists');
+      throw new ConflictException('Post with given slug already exists');
     const author = await this.usersService.findOneById(createPostDTO.authorId);
-    const tags = await this.tagsService.findMultipleTags(createPostDTO.tags);
+
+    if (createPostDTO.tags)
+      tags = await this.tagsService.findMultipleTags(createPostDTO.tags);
 
     const post = this.postRepository.create({
       ...createPostDTO,
-      author,
       tags
     });
-
-    return await this.postRepository.save(post);
+    try {
+      return await this.postRepository.save(post);
+    } catch (error) {
+      console.error('Error saving post:', error);
+      throw new InternalServerErrorException('Failed to create post');
+    }
   }
 
   public async getAll() {
-    console.log(this.configService.get('S3_BUCKET'));
-
-    return await this.postRepository.find({
-      relations: { metaOptions: true, author: true, tags: true }
-    });
+    let posts = undefined;
+    try {
+      posts = await this.postRepository.find({
+        relations: { metaOptions: true, author: true, tags: true }
+      });
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return posts;
   }
 
   public async getPostById(id: number) {
@@ -61,6 +74,7 @@ export class PostsService {
     if (post) return post;
     return new ConflictException('Post with given ID was not found');
   }
+
   public async updatePost(patchPostDTO: PatchPostDTO) {
     const post = await this.postRepository.findOneBy({ id: patchPostDTO.id });
 
