@@ -30,11 +30,9 @@ export class UsersCreateManyProvider {
         let newUser = queryRunner.manager.create(User, user);
         let result = await queryRunner.manager.save(newUser);
         newUsers.push(result);
-
-        // if successful commit the transaction
-        let trans = await queryRunner.commitTransaction();
-        console.log(trans);
       }
+      // if successful commit the transaction
+      await queryRunner.commitTransaction();
     } catch (error) {
       //    unsuccessful rollback
       await queryRunner.rollbackTransaction();
@@ -43,8 +41,6 @@ export class UsersCreateManyProvider {
       // release back the connection
       await queryRunner.release();
     }
-    console.log(newUsers);
-
     return newUsers;
   }
 }
