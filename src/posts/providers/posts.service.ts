@@ -5,16 +5,15 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from './post.entity';
+import { Post } from '../post.entity';
 import { Repository } from 'typeorm';
-import { CreatePostDTO } from './dtos/create-post.dto';
+import { CreatePostDTO } from '../dtos/create-post.dto';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.services';
-import { TagsService } from 'src/tags/tags.service';
-import { PatchPostDTO } from './dtos/patch-post.dto';
+import { PatchPostDTO } from '../dtos/patch-post.dto';
 import { ConfigService } from '@nestjs/config';
-import { GetUsersParamDTO } from 'src/users/dtos/get-users-params.dto';
 import requestTimeoutError from 'src/errors/RequestTimeout';
+import { TagsService } from 'src/tags/providers/tags.service';
 
 @Injectable()
 export class PostsService {

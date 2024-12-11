@@ -10,8 +10,8 @@ import {
   Query
 } from '@nestjs/common';
 import { CreateTagDTO } from './dtos/create-tag.dto';
-import { TagsService } from './tags.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { TagsService } from './providers/tags.service';
 
 @Controller('tags')
 export class TagsController {

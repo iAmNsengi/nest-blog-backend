@@ -5,7 +5,6 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { GetUsersParamDTO } from '../dtos/get-users-params.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { DataSource, Repository } from 'typeorm';
 import { User } from '../user.entity';
@@ -14,7 +13,6 @@ import { CreateUserDTO } from '../dtos/create-user.dto';
 import { ConfigType } from '@nestjs/config';
 import profileConfig from '../config/profileConfig';
 import requestTimeoutError from 'src/errors/RequestTimeout';
-import { query } from 'express';
 
 /**
  * Class to connect to users table and perform business logics
