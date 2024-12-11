@@ -60,10 +60,17 @@ export class Post {
   })
   metaOptions?: MetaOption;
 
-  @ManyToMany(() => Tag, (tag) => tag.posts, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Tag, (tag) => tag.posts, {
+    onDelete: 'CASCADE',
+    cascade: true
+  })
   @JoinTable()
   tags: Tag[];
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, {
+    onDelete: 'CASCADE',
+    cascade: true
+  })
+  @JoinColumn()
   author: User;
 }

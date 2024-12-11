@@ -35,7 +35,7 @@ export class UsersController {
   })
   public findOneById(
     @Param('id', ParseIntPipe)
-    id: GetUsersParamDTO
+    id: number
   ) {
     return this.userService.findOneById(id);
   }
