@@ -1,11 +1,8 @@
 import {
   BadRequestException,
   forwardRef,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
-  RequestTimeoutException
 } from '@nestjs/common';
 import { GetUsersParamDTO } from '../dtos/get-users-params.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -45,7 +42,7 @@ export class UsersService {
     return users;
   }
 
-  public async findOneById(id: number) {
+  public async findOneById(id: GetUsersParamDTO) {
     let users = undefined;
     try {
       users = await this.usersRepository.find();
