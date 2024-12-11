@@ -10,10 +10,10 @@ import {
   Query
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
-import { GetUsersParamDTO } from './dtos/get-users-params.dto';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import RegexCraft from 'regexcraft';
+import { create } from 'domain';
 
 @ApiTags('Users')
 @Controller('users')
@@ -50,5 +50,11 @@ export class UsersController {
   @ApiResponse({ status: 500, description: 'An internal server error occured' })
   public createUser(@Body() createUserDTO: CreateUserDTO) {
     return this.userService.createUser(createUserDTO);
+  }
+
+  @Post('/create-many')
+  @ApiOperation({ description: 'Create many users' })
+  public createManyUsers(@Body() createUsersDTO: CreateUserDTO[]) {
+    return this.userService.createMany(createUsersDTO);
   }
 }

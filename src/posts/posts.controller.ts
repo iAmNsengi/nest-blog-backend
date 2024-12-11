@@ -10,7 +10,7 @@ import {
   Post,
   Query
 } from '@nestjs/common';
-import { PostsService } from './posts.service';
+import { PostsService } from './providers/posts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDTO } from './dtos/create-post.dto';
 import { PatchPostDTO } from './dtos/patch-post.dto';

@@ -5,16 +5,15 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from './post.entity';
+import { Post } from '../post.entity';
 import { Repository } from 'typeorm';
-import { CreatePostDTO } from './dtos/create-post.dto';
+import { CreatePostDTO } from '../dtos/create-post.dto';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.services';
-import { TagsService } from 'src/tags/tags.service';
-import { PatchPostDTO } from './dtos/patch-post.dto';
+import { PatchPostDTO } from '../dtos/patch-post.dto';
 import { ConfigService } from '@nestjs/config';
-import { GetUsersParamDTO } from 'src/users/dtos/get-users-params.dto';
 import requestTimeoutError from 'src/errors/RequestTimeout';
+import { TagsService } from 'src/tags/providers/tags.service';
 
 @Injectable()
 export class PostsService {
@@ -61,7 +60,7 @@ export class PostsService {
     // Create post with explicit author and tags
     const post = this.postRepository.create({
       ...createPostDTO,
-      author, // Explicitly set author
+      author,
       tags // Set resolved tags
     });
 
@@ -69,13 +68,6 @@ export class PostsService {
       return await this.postRepository.save(post);
     } catch (error) {
       console.error('Error saving post:', error);
-
-      // More detailed error handling
-      if (error.code === '23505') {
-        // Unique constraint violation
-        throw new ConflictException('Unique constraint violated');
-      }
-
       throw new InternalServerErrorException('Failed to create post');
     }
   }
