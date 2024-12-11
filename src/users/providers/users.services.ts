@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import requestTimeoutError from 'src/errors/RequestTimeout';
 import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUsersDTO } from '../dtos/create-many-user.dto';
 
 /**
  * Class to connect to users table and perform business logics
@@ -74,7 +75,9 @@ export class UsersService {
     return newUser;
   }
 
-  public async createMany(createUsersDTO: CreateUserDTO[]) {
-    return await this.usersCreateManyProvider.createManyUsers(createUsersDTO);
+  public async createMany(createManyUsersDTO: CreateManyUsersDTO) {
+    return await this.usersCreateManyProvider.createManyUsers(
+      createManyUsersDTO
+    );
   }
 }

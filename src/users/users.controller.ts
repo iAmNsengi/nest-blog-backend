@@ -1,19 +1,15 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Get,
-  HttpStatus,
   Param,
   ParseIntPipe,
-  Post,
-  Query
+  Post
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dtos/create-user.dto';
-import RegexCraft from 'regexcraft';
-import { create } from 'domain';
+import { CreateManyUsersDTO } from './dtos/create-many-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -54,7 +50,7 @@ export class UsersController {
 
   @Post('/create-many')
   @ApiOperation({ description: 'Create many users' })
-  public createManyUsers(@Body() createUsersDTO: CreateUserDTO[]) {
-    return this.userService.createMany(createUsersDTO);
+  public createManyUsers(@Body() createManyUsersDTO: CreateManyUsersDTO) {
+    return this.userService.createMany(createManyUsersDTO);
   }
 }
