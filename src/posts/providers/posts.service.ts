@@ -60,7 +60,7 @@ export class PostsService {
     // Create post with explicit author and tags
     const post = this.postRepository.create({
       ...createPostDTO,
-      author, // Explicitly set author
+      author,
       tags // Set resolved tags
     });
 
@@ -68,13 +68,6 @@ export class PostsService {
       return await this.postRepository.save(post);
     } catch (error) {
       console.error('Error saving post:', error);
-
-      // More detailed error handling
-      if (error.code === '23505') {
-        // Unique constraint violation
-        throw new ConflictException('Unique constraint violated');
-      }
-
       throw new InternalServerErrorException('Failed to create post');
     }
   }
