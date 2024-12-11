@@ -1,7 +1,8 @@
 import {
   HttpException,
   Injectable,
-  InternalServerErrorException
+  InternalServerErrorException,
+  RequestTimeoutException
 } from '@nestjs/common';
 import { User } from '../user.entity';
 import { DataSource } from 'typeorm';
@@ -15,14 +16,16 @@ export class UsersCreateManyProvider {
     let newUsers: User[] = [];
     // create a query runner instance
     const queryRunner = this.dataSource.createQueryRunner();
-    // connect query runner to our data source
-    await queryRunner.connect();
-
-    // start transaction
     try {
+      // connect query runner to our data source
+      await queryRunner.connect();
+      // start transaction
+
       await queryRunner.startTransaction();
     } catch (error) {
-      throw new InternalServerErrorException("Couldn't start transaction");
+      throw new RequestTimeoutException(
+        "Couldn't connect to the database right now, try again later"
+      );
     }
 
     try {
