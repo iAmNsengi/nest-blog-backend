@@ -3,15 +3,15 @@ import {
   Injectable,
   InternalServerErrorException
 } from '@nestjs/common';
-import { CreateUserDTO } from '../dtos/create-user.dto';
 import { User } from '../user.entity';
 import { DataSource } from 'typeorm';
+import { CreateManyUsersDTO } from '../dtos/create-many-user.dto';
 
 @Injectable()
 export class UsersCreateManyProvider {
   constructor(private readonly dataSource: DataSource) {}
 
-  public async createManyUsers(createUsersDTO: CreateUserDTO[]) {
+  public async createManyUsers(createManyUsersDTO: CreateManyUsersDTO) {
     let newUsers: User[] = [];
     // create a query runner instance
     const queryRunner = this.dataSource.createQueryRunner();
@@ -26,7 +26,7 @@ export class UsersCreateManyProvider {
     }
 
     try {
-      for (let user of createUsersDTO) {
+      for (let user of createManyUsersDTO.users) {
         let newUser = queryRunner.manager.create(User, user);
         let result = await queryRunner.manager.save(newUser);
         newUsers.push(result);
