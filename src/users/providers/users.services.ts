@@ -49,7 +49,7 @@ export class UsersService {
   public async findOneById(id: number) {
     let user = undefined;
     try {
-      user = await this.usersRepository.findBy({ id });
+      user = await this.usersRepository.findOneBy({ id });
     } catch (error) {
       requestTimeoutError();
     }

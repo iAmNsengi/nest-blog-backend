@@ -33,30 +33,52 @@ export class PostsService {
   ) {}
 
   public async createPost(createPostDTO: CreatePostDTO) {
+    // Check for existing post with the same slug
     const postExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
     });
-    let tags = undefined;
 
     if (postExist)
       throw new ConflictException('Post with given slug already exists');
-    const author = await this.usersService.findOneById(createPostDTO.authorId);
 
-    if (createPostDTO.tags)
+    // Verify author exists
+    const author = await this.usersService.findOneById(createPostDTO.authorId);
+    if (!author)
+      throw new NotFoundException(
+        `Author with ID ${createPostDTO.authorId} not found`
+      );
+
+    // Resolve tags
+    let tags = [];
+    if (createPostDTO.tags && createPostDTO.tags.length > 0) {
       tags = await this.tagsService.findMultipleTags(createPostDTO.tags);
 
+      // Optional: Throw error if no tags found
+      if (createPostDTO.tags.length > 0 && tags.length === 0)
+        throw new NotFoundException('No valid tags found');
+    }
+
+    // Create post with explicit author and tags
     const post = this.postRepository.create({
       ...createPostDTO,
-      tags
+      author, // Explicitly set author
+      tags // Set resolved tags
     });
+
     try {
       return await this.postRepository.save(post);
     } catch (error) {
       console.error('Error saving post:', error);
+
+      // More detailed error handling
+      if (error.code === '23505') {
+        // Unique constraint violation
+        throw new ConflictException('Unique constraint violated');
+      }
+
       throw new InternalServerErrorException('Failed to create post');
     }
   }
-
   public async getAll() {
     let posts = undefined;
     try {
