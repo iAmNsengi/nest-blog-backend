@@ -23,9 +23,14 @@ export class PostsController {
   @ApiOperation({ summary: 'Get all posts' })
   @ApiResponse({ status: 200, description: 'Posts retrieved successfully' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  @Get()
+  @Get('')
   public getAllPosts() {
     return this.postService.getAll();
+  }
+
+  @Get(':/userId')
+  public getPosts(@Param('userId') userId: string) {
+    return;
   }
 
   @ApiOperation({ summary: 'Get post by ID' })
