@@ -14,6 +14,7 @@ import { PostsService } from './providers/posts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDTO } from './dtos/create-post.dto';
 import { PatchPostDTO } from './dtos/patch-post.dto';
+import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -23,11 +24,10 @@ export class PostsController {
   @ApiOperation({ summary: 'Get all posts' })
   @ApiResponse({ status: 200, description: 'Posts retrieved successfully' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  @Get('?limit')
-  public getAllPosts() {
-    return this.postService.getAll();
+  @Get('')
+  public getAllPosts(@Query() postQuery: PaginationQueryDTO) {
+    return this.postService.getAll(postQuery);
   }
-
 
   @ApiOperation({ summary: 'Get post by ID' })
   @ApiResponse({ status: 200, description: 'Post retrieved successfully' })

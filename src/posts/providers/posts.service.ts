@@ -14,6 +14,7 @@ import { PatchPostDTO } from '../dtos/patch-post.dto';
 import { ConfigService } from '@nestjs/config';
 import requestTimeoutError from 'src/errors/RequestTimeout';
 import { TagsService } from 'src/tags/providers/tags.service';
+import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
 
 @Injectable()
 export class PostsService {
@@ -74,11 +75,12 @@ export class PostsService {
 
   /** Get all posts */
 
-  public async getAll() {
+  public async getAll(postQuery: PaginationQueryDTO) {
     let posts = undefined;
     try {
       posts = await this.postRepository.find({
-        relations: { metaOptions: true, author: true, tags: true }
+        relations: { metaOptions: true, author: true, tags: true },
+        take: postQuery.limit
       });
     } catch (error) {
       requestTimeoutError();
