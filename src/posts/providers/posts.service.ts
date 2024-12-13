@@ -14,6 +14,7 @@ import { PatchPostDTO } from '../dtos/patch-post.dto';
 import { ConfigService } from '@nestjs/config';
 import requestTimeoutError from 'src/errors/RequestTimeout';
 import { TagsService } from 'src/tags/providers/tags.service';
+import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
 
 @Injectable()
 export class PostsService {
@@ -71,11 +72,15 @@ export class PostsService {
       throw new InternalServerErrorException('Failed to create post');
     }
   }
-  public async getAll() {
+
+  /** Get all posts */
+
+  public async getAll(postQuery: PaginationQueryDTO) {
     let posts = undefined;
     try {
       posts = await this.postRepository.find({
-        relations: { metaOptions: true, author: true, tags: true }
+        relations: { metaOptions: true, author: true, tags: true },
+        take: postQuery.limit
       });
     } catch (error) {
       requestTimeoutError();
@@ -83,11 +88,27 @@ export class PostsService {
     return posts;
   }
 
+  /** Find all posts with an id */
+
+  public async findAll(userId: number) {
+    let posts = undefined;
+    try {
+      posts = await this.postRepository.find({ where: { id: userId } });
+    } catch (error) {
+      requestTimeoutError();
+    }
+    return posts;
+  }
+
+  /** Get post by id */
+
   public async getPostById(id: number) {
     const post = await this.postRepository.findOne({ where: { id } });
     if (post) return post;
     return new ConflictException('Post with given ID was not found');
   }
+
+  /** Update a post */
 
   public async updatePost(patchPostDTO: PatchPostDTO) {
     const post = await this.postRepository.findOneBy({ id: patchPostDTO.id });
