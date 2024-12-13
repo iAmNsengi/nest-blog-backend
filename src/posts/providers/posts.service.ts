@@ -80,7 +80,8 @@ export class PostsService {
     try {
       posts = await this.postRepository.find({
         relations: { metaOptions: true, author: true, tags: true },
-        take: postQuery.limit
+        take: postQuery.limit,
+        skip: (postQuery.page - 1) * postQuery.limit
       });
     } catch (error) {
       requestTimeoutError();
