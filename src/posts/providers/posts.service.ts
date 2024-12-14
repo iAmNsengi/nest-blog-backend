@@ -11,10 +11,10 @@ import { CreatePostDTO } from '../dtos/create-post.dto';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.services';
 import { PatchPostDTO } from '../dtos/patch-post.dto';
-import { ConfigService } from '@nestjs/config';
 import requestTimeoutError from 'src/errors/RequestTimeout';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Injectable()
 export class PostsService {
@@ -23,13 +23,12 @@ export class PostsService {
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
     @InjectRepository(MetaOption)
-    private readonly metaOptionsRepository: Repository<MetaOption>,
-
     private readonly usersService: UsersService,
 
     private readonly tagsService: TagsService,
-    /** Injecting config service */
-    private readonly configService: ConfigService
+
+    /** Injecting pagination provider */
+    private readonly paginationProvider: PaginationProvider
   ) {}
 
   public async createPost(createPostDTO: CreatePostDTO) {
@@ -78,11 +77,13 @@ export class PostsService {
   public async getAll(postQuery: PaginationQueryDTO) {
     let posts = undefined;
     try {
-      posts = await this.postRepository.find({
-        relations: { metaOptions: true, author: true, tags: true },
-        take: postQuery.limit,
-        skip: (postQuery.page - 1) * postQuery.limit
-      });
+      posts = await this.paginationProvider.paginateQuery(
+        {
+          limit: postQuery.limit,
+          page: postQuery.page
+        },
+        this.postRepository
+      );
     } catch (error) {
       requestTimeoutError();
     }

@@ -7,6 +7,7 @@ import { MetaOptionsService } from 'src/meta-options/providers/meta-options.serv
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { UsersModule } from 'src/users/users.module';
 import { TagsModule } from 'src/tags/tags.module';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
 
 @Module({
   controllers: [PostsController],
@@ -14,7 +15,8 @@ import { TagsModule } from 'src/tags/tags.module';
     TypeOrmModule.forFeature([Post]),
     MetaOptionsModule,
     UsersModule,
-    TagsModule
+    TagsModule,
+    PaginationModule
   ],
   providers: [PostsService],
   exports: [PostsService]
