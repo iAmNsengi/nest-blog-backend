@@ -14,6 +14,7 @@ import requestTimeoutError from 'src/errors/RequestTimeout';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDTO } from '../dtos/create-many-user.dto';
 import { CreateUserProvider } from './create-user.provider';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 
 /**
  * Class to connect to users table and perform business logics
@@ -24,14 +25,15 @@ export class UsersService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
-
+    /** injecting the usersrepository */
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-
     /** Injecting user  create many provider */
     private readonly usersCreateManyProvider: UsersCreateManyProvider,
     /** injecting createuser provider */
-    private readonly createUserProvider: CreateUserProvider
+    private readonly createUserProvider: CreateUserProvider,
+    /** injecting the findOneUseByEmail provider */
+    private readonly findOneUserByEmail: FindOneUserByEmailProvider
   ) {}
 
   public async findAll() {
@@ -63,5 +65,9 @@ export class UsersService {
     return await this.usersCreateManyProvider.createManyUsers(
       createManyUsersDTO
     );
+  }
+
+  public async findOneByEmail(email: string): Promise<User> {
+    return await this.findOneUserByEmail.findOneByEmail(email);
   }
 }
