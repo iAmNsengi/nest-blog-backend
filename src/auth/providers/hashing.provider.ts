@@ -7,5 +7,5 @@ export abstract class HashingProvider {
   abstract comparePassword(
     data: string | Buffer,
     encrypted: string
-  ): Promise<Boolean>;
+  ): Promise<boolean>;
 }

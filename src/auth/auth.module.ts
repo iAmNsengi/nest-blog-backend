@@ -1,16 +1,18 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthService } from './providers/auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { HashingProvider } from './providers/hashing.provider';
 import { BcryptProvider } from './providers/bcrypt.provider';
+import { SignInProvider } from './providers/sign-in.provider';
 
 @Module({
   controllers: [AuthController],
   providers: [
     AuthService,
     // hashingProvider needs to be provided hence it is an abstract class and it can't be instantiated and its implementation is in BcryptProvider
-    { provide: HashingProvider, useClass: BcryptProvider }
+    { provide: HashingProvider, useClass: BcryptProvider },
+    SignInProvider
   ],
   imports: [forwardRef(() => UsersModule)],
   exports: [AuthService, HashingProvider]
