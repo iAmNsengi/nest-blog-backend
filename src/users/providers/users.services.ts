@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/auth/providers/auth.service';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
