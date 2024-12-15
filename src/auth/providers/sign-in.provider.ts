@@ -37,12 +37,12 @@ export class SignInProvider {
     } catch (error) {
       requestTimeoutError("Couldn't compare passwords");
     }
-    // send confirmation
     if (!isEqual)
       throw new UnauthorizedException(
         '"User with given credentials was not found'
       );
 
+    // send confirmation
     return isEqual;
   }
 }
