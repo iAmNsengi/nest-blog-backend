@@ -29,15 +29,11 @@ export class AccessTokenGuard implements CanActivate {
     if (!token)
       throw new UnauthorizedException('Token is missing from the headers');
     try {
-      console.log(this.jwtConfiguration);
-      console.log(token);
-
       const payload = await this.jwtService.verifyAsync(
         token,
         this.jwtConfiguration
       );
       request[REQUEST_USER_KEY] = payload;
-      console.log(payload);
     } catch (error) {
       console.error('Token verification error:', error);
       throw new UnauthorizedException('Invalid token');

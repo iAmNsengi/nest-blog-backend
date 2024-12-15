@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  SetMetadata,
   UseGuards
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
@@ -39,6 +40,7 @@ export class UsersController {
   }
 
   @Post('')
+  @SetMetadata('authType', 'none')
   @ApiOperation({ description: 'Create a new User' })
   @ApiResponse({ status: 200, description: 'User created successfully' })
   @ApiResponse({
