@@ -2,10 +2,12 @@ import {
   CanActivate,
   ExecutionContext,
   Inject,
-  Injectable
+  Injectable,
+  UnauthorizedException
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { log } from 'console';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import jwtConfig from 'src/auth/config/jwt.config';
@@ -19,15 +21,22 @@ export class AccessTokenGuard implements CanActivate {
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>
   ) {}
-  canActivate(
-    context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // extract the request from the execution context
     const request = context.switchToHttp().getRequest();
     // extract token from header
     const token = this.extractRequestFromHeader(request);
     // validate the token
-    
+    if (!token)
+      throw new UnauthorizedException('Token is missing from the headers');
+    try {
+      const payload = await this.jwtService.verifyAsync(
+        token,
+        this.jwtConfiguration
+      );
+      request['user'] = payload;
+    } catch (error) {}
+
     return true;
   }
 
