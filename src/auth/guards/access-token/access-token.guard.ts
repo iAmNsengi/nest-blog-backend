@@ -7,9 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { log } from 'console';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 
@@ -31,19 +29,28 @@ export class AccessTokenGuard implements CanActivate {
     if (!token)
       throw new UnauthorizedException('Token is missing from the headers');
     try {
+      console.log(this.jwtConfiguration);
+      console.log(token);
+
       const payload = await this.jwtService.verifyAsync(
         token,
         this.jwtConfiguration
       );
       request[REQUEST_USER_KEY] = payload;
-    } catch {
-      throw new UnauthorizedException();
+      console.log(payload);
+    } catch (error) {
+      console.error('Token verification error:', error);
+      throw new UnauthorizedException('Invalid token');
     }
     return true;
   }
 
   private extractRequestFromHeader(request: Request): string | undefined {
-    const [_, token] = request.headers.authorization?.split(' ') ?? [];
+    const authHeader = request.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return undefined;
+    }
+    const [, token] = authHeader.split(' ');
     return token;
   }
 }

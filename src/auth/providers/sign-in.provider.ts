@@ -56,7 +56,7 @@ export class SignInProvider {
         email: user.email
       },
       {
-        secret: this.jwtConfiguration.audience,
+        secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,
         expiresIn: this.jwtConfiguration.accessTokenTTL
