@@ -24,6 +24,8 @@ const ENV = process.env.NODE_ENV;
     UsersModule,
     PostsModule,
     AuthModule,
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forRoot({
       isGlobal: true,
       // envFilePath: ['.env.development']
@@ -32,11 +34,7 @@ const ENV = process.env.NODE_ENV;
       validationSchema: environmentValidation
     }),
     TypeOrmModule.forRootAsync({
-      imports: [
-        ConfigModule,
-        ConfigModule.forFeature(jwtConfig),
-        JwtModule.registerAsync(jwtConfig.asProvider())
-      ],
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
