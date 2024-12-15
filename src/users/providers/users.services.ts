@@ -13,6 +13,7 @@ import { CreateUserDTO } from '../dtos/create-user.dto';
 import requestTimeoutError from 'src/errors/RequestTimeout';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDTO } from '../dtos/create-many-user.dto';
+import { CreateUserProvider } from './create-user.provider';
 
 /**
  * Class to connect to users table and perform business logics
@@ -28,7 +29,9 @@ export class UsersService {
     private usersRepository: Repository<User>,
 
     /** Injecting user  create many provider */
-    private readonly usersCreateManyProvider: UsersCreateManyProvider
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
+    /** injecting createuser provider */
+    private readonly createUserProvider: CreateUserProvider
   ) {}
 
   public async findAll() {
@@ -53,26 +56,7 @@ export class UsersService {
   }
 
   public async createUser(createUserDTO: CreateUserDTO) {
-    let userExists = undefined;
-    try {
-      userExists = await this.usersRepository.findOne({
-        where: {
-          email: createUserDTO.email
-        }
-      });
-    } catch (error) {
-      requestTimeoutError();
-    }
-    if (userExists)
-      throw new BadRequestException('User with email already exists');
-
-    let newUser = this.usersRepository.create(createUserDTO);
-    try {
-      await this.usersRepository.save(newUser);
-    } catch (error) {
-      requestTimeoutError();
-    }
-    return newUser;
+    return this.createUserProvider.createUser(createUserDTO);
   }
 
   public async createMany(createManyUsersDTO: CreateManyUsersDTO) {

@@ -13,6 +13,6 @@ import { BcryptProvider } from './providers/bcrypt.provider';
     { provide: HashingProvider, useClass: BcryptProvider }
   ],
   imports: [forwardRef(() => UsersModule)],
-  exports: [AuthService]
+  exports: [AuthService, HashingProvider]
 })
 export class AuthModule {}
