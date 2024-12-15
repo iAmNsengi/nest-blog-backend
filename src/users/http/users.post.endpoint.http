@@ -5,3 +5,25 @@ Content-Type: application/json
   "lastName": "Eliezer",
   "email": "testit@mail.com",
   "password": "Strong$1234"}
+
+
+  ###
+  POST http://localhost:3000/users/create-many
+  Content-Type: application/json
+
+  {
+    "users":[
+        { "firstName": "Nsengi",
+  "lastName": "Eliezer",
+  "email": "testit@mail.com",
+  "password": "Strong$1234"},
+  { "firstName": "Nsengi",
+  "lastName": "Eliezer",
+  "email": "testit@mail.com",
+  "password": "Strong$1234"},
+  { "firstName": "Nsengi",
+  "lastName": "Eliezer",
+  "email": "testit@mail.com",
+  "password": "Strong$1234"}
+    ]
+  }

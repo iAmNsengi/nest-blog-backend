@@ -4,12 +4,14 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Post
+  Post,
+  UseGuards
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { CreateManyUsersDTO } from './dtos/create-many-user.dto';
+import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -48,6 +50,7 @@ export class UsersController {
     return this.userService.createUser(createUserDTO);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post('/create-many')
   @ApiOperation({ description: 'Create many users' })
   public createManyUsers(@Body() createManyUsersDTO: CreateManyUsersDTO) {
