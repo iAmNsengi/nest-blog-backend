@@ -11,6 +11,7 @@ import { log } from 'console';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import jwtConfig from 'src/auth/config/jwt.config';
+import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -34,9 +35,10 @@ export class AccessTokenGuard implements CanActivate {
         token,
         this.jwtConfiguration
       );
-      request['user'] = payload;
-    } catch (error) {}
-
+      request[REQUEST_USER_KEY] = payload;
+    } catch {
+      throw new UnauthorizedException();
+    }
     return true;
   }
 
