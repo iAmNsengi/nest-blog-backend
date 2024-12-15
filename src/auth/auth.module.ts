@@ -7,7 +7,11 @@ import { BcryptProvider } from './providers/bcrypt.provider';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, HashingProvider, BcryptProvider],
+  providers: [
+    AuthService,
+    // hashingProvider needs to be provided hence it is an abstract class and it can't be instantiated and its implementation is in BcryptProvider
+    { provide: HashingProvider, useClass: BcryptProvider }
+  ],
   imports: [forwardRef(() => UsersModule)],
   exports: [AuthService]
 })
