@@ -20,12 +20,7 @@ import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guar
     UsersService,
     UsersCreateManyProvider,
     CreateUserProvider,
-    FindOneUserByEmailProvider,
-    /** protecting globally the users module with a AccessTokenGuard */
-    {
-      provide: APP_GUARD,
-      useClass: AccessTokenGuard
-    }
+    FindOneUserByEmailProvider
   ],
   exports: [UsersService],
   imports: [
