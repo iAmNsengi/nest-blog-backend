@@ -10,6 +10,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzLCJlbWFpb
   "schema": "{\"@context\": \"https://schema.org\", \"@type\": \"Person\"}",
   "featuredImageUrl": "https://schema.org",
   "publishedOn": "2024-12-23T07:46:32+0000",
-  "tags": [1] 
+  "tags": [1,909] 
 }
 
