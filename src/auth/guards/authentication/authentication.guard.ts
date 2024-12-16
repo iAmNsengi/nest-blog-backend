@@ -1,6 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
 import { AccessTokenGuard } from '../access-token/access-token.guard';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { AUTH_TYPE_KEY } from 'src/auth/constants/auth.constants';
@@ -21,10 +25,7 @@ export class AuthenticationGuard implements CanActivate {
     private readonly reflector: Reflector,
     private readonly accessTokenGuard: AccessTokenGuard
   ) {}
-  canActivate(
-    context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log(this.authTypeGuardMap);
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // authTypes from reflector
     const authTypes = this.reflector.getAllAndOverride(AUTH_TYPE_KEY, [
       //get all keys of all auth_type_key
@@ -32,8 +33,15 @@ export class AuthenticationGuard implements CanActivate {
       context.getClass()
     ]) ?? [AuthenticationGuard.defaultAuthType];
     // arrayof guards
-    // loop guards and fire canActivate mthod
+    const guards = authTypes.map((type) => this.authTypeGuardMap[type]).flat();
 
-    return true;
+    // loop guards and fire canActivate mthod
+    for (const instance of guards) {
+      const canActivate = await Promise.resolve(instance.canActivate(context));
+      if (canActivate) return true;
+    }
+
+    // throw an unauthorized exception when all none of the instances was true
+    throw new UnauthorizedException();
   }
 }
