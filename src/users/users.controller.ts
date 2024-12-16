@@ -42,7 +42,6 @@ export class UsersController {
   }
 
   @Post('')
-  @Auth(AuthType.None)
   @ApiOperation({ description: 'Create a new User' })
   @ApiResponse({ status: 200, description: 'User created successfully' })
   @ApiResponse({
@@ -54,6 +53,7 @@ export class UsersController {
     return this.userService.createUser(createUserDTO);
   }
 
+  @Auth(AuthType.Bearer)
   @Post('/create-many')
   @ApiOperation({ description: 'Create many users' })
   public createManyUsers(@Body() createManyUsersDTO: CreateManyUsersDTO) {
