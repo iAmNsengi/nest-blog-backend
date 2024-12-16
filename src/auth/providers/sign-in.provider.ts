@@ -8,10 +8,7 @@ import { SignInDTO } from '../dtos/signin.dto';
 import { UsersService } from 'src/users/providers/users.services';
 import { HashingProvider } from './hashing.provider';
 import requestTimeoutError from 'src/errors/RequestTimeout';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigType } from '@nestjs/config';
-import jwtConfig from '../config/jwt.config';
-import { ActiveUserInterface } from '../interfaces/active-user-interface';
+import { GenerateTokensProvider } from './generate-tokens.provider';
 
 @Injectable()
 export class SignInProvider {
@@ -21,11 +18,8 @@ export class SignInProvider {
     private readonly userService: UsersService,
     /** inject the hashing provider */
     private readonly hashingProvider: HashingProvider,
-    /** injecting JWT service */
-    private readonly jwtService: JwtService,
-    /** inject jwtConfigurations */
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>
+
+    private readonly generateTokensProvider: GenerateTokensProvider
   ) {}
   public async signin(signInDTO: SignInDTO) {
     // find user using email
@@ -51,18 +45,6 @@ export class SignInProvider {
         '"User with given credentials was not found'
       );
 
-    const accessToken = await this.jwtService.signAsync(
-      {
-        sub: user.id,
-        email: user.email
-      } as ActiveUserInterface,
-      {
-        secret: this.jwtConfiguration.secret,
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        expiresIn: this.jwtConfiguration.accessTokenTTL
-      }
-    );
-    return { accessToken };
+    return await this.generateTokensProvider.generateTokens(user);
   }
 }
