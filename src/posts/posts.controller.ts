@@ -15,6 +15,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDTO } from './dtos/create-post.dto';
 import { PatchPostDTO } from './dtos/patch-post.dto';
 import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
+import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
+import { ActiveUserInterface } from 'src/auth/interfaces/active-user-interface';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -53,7 +56,12 @@ export class PostsController {
   })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @Post()
-  public createPost(@Body() createPostDTO: CreatePostDTO) {
+  public createPost(
+    @Body() createPostDTO: CreatePostDTO,
+    @ActiveUser() user: ActiveUserInterface
+  ) {
+    console.log(user);
+
     return this.postService.createPost(createPostDTO);
   }
 

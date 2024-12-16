@@ -15,6 +15,7 @@ import requestTimeoutError from 'src/errors/RequestTimeout';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { create } from 'domain';
 
 @Injectable()
 export class PostsService {
@@ -22,11 +23,8 @@ export class PostsService {
     /** Injecting the postRepository */
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
-    @InjectRepository(MetaOption)
     private readonly usersService: UsersService,
-
     private readonly tagsService: TagsService,
-
     /** Injecting pagination provider */
     private readonly paginationProvider: PaginationProvider
   ) {}
@@ -42,9 +40,11 @@ export class PostsService {
 
     // Verify author exists
     const author = await this.usersService.findOneById(createPostDTO.authorId);
+    console.log(author, createPostDTO.authorId, '-------------test here');
+
     if (!author)
       throw new NotFoundException(
-        `Author with ID ${createPostDTO.authorId} not found`
+        `Author with ID ${createPostDTO.authorId} was not found in our records!!`
       );
 
     // Resolve tags

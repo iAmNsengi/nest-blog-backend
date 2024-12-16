@@ -1,5 +1,6 @@
 POST http://localhost:3000/posts
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzLCJlbWFpbCI6Im1haWxAbWFpbC5jb20iLCJpYXQiOjE3MzQzMzQ2MDQsImV4cCI6MTczNDMzODIwNCwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.ijV0B0cVo56ZmC2Y2-jU_8tsKj7uOf3Ee_Am5B1HakI
 
 {
   "title": "My first Post",
@@ -10,9 +11,8 @@ Content-Type: application/json
   "schema": "{\"@context\": \"https://schema.org\", \"@type\": \"Person\"}",
   "featuredImageUrl": "https://schema.org",
   "publishedOn": "2024-12-23T07:46:32+0000",
-  "tags": ["nestjs", "typescript"],
-  "metaOptions": [
-    {"key": "exampleKey", "value": 20}
-  ]
+  "tags": [1],
+  "authorId":50
+ 
 }
 
