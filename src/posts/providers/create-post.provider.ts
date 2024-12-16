@@ -10,6 +10,7 @@ import { Post } from '../post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/providers/users.services';
 import { TagsService } from 'src/tags/providers/tags.service';
+import { ActiveUserInterface } from 'src/auth/interfaces/active-user-interface';
 
 @Injectable()
 export class CreatePostProvider {
@@ -20,7 +21,10 @@ export class CreatePostProvider {
     private readonly tagsService: TagsService
   ) {}
 
-  public async createPost(createPostDTO: CreatePostDTO) {
+  public async createPost(
+    createPostDTO: CreatePostDTO,
+    user: ActiveUserInterface
+  ) {
     // Check for existing post with the same slug
     const postExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
@@ -30,7 +34,7 @@ export class CreatePostProvider {
       throw new ConflictException('Post with given slug already exists');
 
     // Verify author exists
-    const author = await this.usersService.findOneById(createPostDTO.authorId);
+    const author = await this.usersService.findOneById(user.sub);
 
     if (!author)
       throw new NotFoundException(

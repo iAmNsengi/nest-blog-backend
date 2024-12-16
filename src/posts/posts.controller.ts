@@ -60,9 +60,7 @@ export class PostsController {
     @Body() createPostDTO: CreatePostDTO,
     @ActiveUser() user: ActiveUserInterface
   ) {
-    console.log(user);
-
-    return this.postService.createPost(createPostDTO);
+    return this.postService.createPost(createPostDTO, user);
   }
 
   @ApiOperation({ summary: 'Updates the content of a post' })

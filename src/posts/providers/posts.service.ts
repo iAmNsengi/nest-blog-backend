@@ -16,6 +16,8 @@ import { TagsService } from 'src/tags/providers/tags.service';
 import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { create } from 'domain';
+import { ActiveUserInterface } from 'src/auth/interfaces/active-user-interface';
+import { CreatePostProvider } from './create-post.provider';
 
 @Injectable()
 export class PostsService {
@@ -26,11 +28,16 @@ export class PostsService {
     private readonly usersService: UsersService,
     private readonly tagsService: TagsService,
     /** Injecting pagination provider */
-    private readonly paginationProvider: PaginationProvider
+    private readonly paginationProvider: PaginationProvider,
+    /** injecting the create post provider */
+    private readonly createPostProvider: CreatePostProvider
   ) {}
 
-  public async createPost(createPostDTO: CreatePostDTO) {
-    return;
+  public async createPost(
+    createPostDTO: CreatePostDTO,
+    user: ActiveUserInterface
+  ) {
+    return this.createPostProvider.createPost(createPostDTO, user);
   }
 
   /** Get all posts */
