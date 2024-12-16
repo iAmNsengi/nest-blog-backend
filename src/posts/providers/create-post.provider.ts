@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -25,21 +26,21 @@ export class CreatePostProvider {
     createPostDTO: CreatePostDTO,
     user: ActiveUserInterface
   ) {
-    // Check for existing post with the same slug
-    const postExist = await this.postRepository.findOne({
+    let postWithSlugExist = await this.postRepository.findOne({
       where: { slug: createPostDTO.slug }
     });
 
-    if (postExist)
-      throw new ConflictException('Post with given slug already exists');
+    // add a radom number to the slug when post exists
+    while (postWithSlugExist) {
+      const random = Math.floor(Math.random() * 100);
+      createPostDTO.slug += `-${random}`;
+      postWithSlugExist = await this.postRepository.findOne({
+        where: { slug: createPostDTO.slug }
+      });
+    }
 
-    // Verify author exists
+    // Get the user row from the db
     const author = await this.usersService.findOneById(user.sub);
-
-    if (!author)
-      throw new NotFoundException(
-        `Author with ID ${createPostDTO.authorId} was not found in our records!!`
-      );
 
     // Resolve tags
     let tags = [];
@@ -49,6 +50,10 @@ export class CreatePostProvider {
       // Optional: Throw error if no tags found
       if (createPostDTO.tags.length > 0 && tags.length === 0)
         throw new NotFoundException('No valid tags found');
+      if (createPostDTO.tags.length !== tags.length)
+        throw new BadRequestException(
+          "Please check your tags, some of the tag IDs doesn't exist"
+        );
     }
 
     // Create post with explicit author and tags

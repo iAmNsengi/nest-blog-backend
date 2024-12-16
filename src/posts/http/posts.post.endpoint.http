@@ -1,18 +1,15 @@
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzLCJlbWFpbCI6Im1haWxAbWFpbC5jb20iLCJpYXQiOjE3MzQzMzQ2MDQsImV4cCI6MTczNDMzODIwNCwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.ijV0B0cVo56ZmC2Y2-jU_8tsKj7uOf3Ee_Am5B1HakI
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzLCJlbWFpbCI6Im1haWxAbWFpbC5jb20iLCJpYXQiOjE3MzQzMzg1OTksImV4cCI6MTczNDM0MjE5OSwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.r-WnLy8NkF_SeylTsIVHuxqVdgFG-2p5VQsBrht1x8E
 {
   "title": "My first Post",
   "postType": "post",
-  "slug": "my-first-post",
+  "slug": "my-first-post-3",
   "status": "draft",
   "content": "I am Nsengi great Dev of the 21st century",
   "schema": "{\"@context\": \"https://schema.org\", \"@type\": \"Person\"}",
   "featuredImageUrl": "https://schema.org",
   "publishedOn": "2024-12-23T07:46:32+0000",
-  "tags": [1],
-  "authorId":50
- 
+  "tags": [1,909] 
 }
 

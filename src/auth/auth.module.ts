@@ -8,6 +8,7 @@ import { SignInProvider } from './providers/sign-in.provider';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
+import { GenerateTokensProvider } from './providers/generate-tokens.provider';
 
 @Module({
   controllers: [AuthController],
@@ -15,7 +16,8 @@ import { JwtModule } from '@nestjs/jwt';
     AuthService,
     // hashingProvider needs to be provided hence it is an abstract class and it can't be instantiated and its implementation is in BcryptProvider
     { provide: HashingProvider, useClass: BcryptProvider },
-    SignInProvider
+    SignInProvider,
+    GenerateTokensProvider
   ],
   imports: [
     forwardRef(() => UsersModule),
