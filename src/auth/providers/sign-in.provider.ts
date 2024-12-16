@@ -11,6 +11,7 @@ import requestTimeoutError from 'src/errors/RequestTimeout';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import jwtConfig from '../config/jwt.config';
+import { ActiveUserInterface } from '../interfaces/active-user-interface';
 
 @Injectable()
 export class SignInProvider {
@@ -54,7 +55,7 @@ export class SignInProvider {
       {
         sub: user.id,
         email: user.email
-      },
+      } as ActiveUserInterface,
       {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,

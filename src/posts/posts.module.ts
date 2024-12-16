@@ -8,6 +8,7 @@ import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { UsersModule } from 'src/users/users.module';
 import { TagsModule } from 'src/tags/tags.module';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { CreatePostProvider } from './providers/create-post.provider';
 
 @Module({
   controllers: [PostsController],
@@ -18,7 +19,7 @@ import { PaginationModule } from 'src/common/pagination/pagination.module';
     TagsModule,
     PaginationModule
   ],
-  providers: [PostsService],
+  providers: [PostsService, CreatePostProvider],
   exports: [PostsService]
 })
 export class PostsModule {}

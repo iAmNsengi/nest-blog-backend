@@ -48,12 +48,15 @@ export class UsersService {
 
   public async findOneById(id: number) {
     let user = undefined;
+
     try {
       user = await this.usersRepository.findOneBy({ id });
     } catch (error) {
       requestTimeoutError();
     }
-    if (!user) throw new NotFoundException(`User with id ${id} was not found!`);
+    if (!user)
+      throw new NotFoundException(`User with id ${id} was not found!!`);
+
     return user;
   }
 

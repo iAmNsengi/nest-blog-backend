@@ -1,5 +1,7 @@
 import {
   IsArray,
+  IsDate,
+  IsDateString,
   IsEnum,
   IsInt,
   IsISO8601,
@@ -87,7 +89,7 @@ export class CreatePostDTO {
     description: 'The date on which the blog post is published',
     example: '2024-12-23T07:46:32+0000'
   })
-  @IsISO8601()
+  @IsDate()
   @IsOptional()
   publishedOn?: Date;
 

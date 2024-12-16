@@ -15,6 +15,9 @@ import requestTimeoutError from 'src/errors/RequestTimeout';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PaginationQueryDTO } from 'src/common/pagination/dtos/pagination-query.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { create } from 'domain';
+import { ActiveUserInterface } from 'src/auth/interfaces/active-user-interface';
+import { CreatePostProvider } from './create-post.provider';
 
 @Injectable()
 export class PostsService {
@@ -22,54 +25,19 @@ export class PostsService {
     /** Injecting the postRepository */
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
-    @InjectRepository(MetaOption)
     private readonly usersService: UsersService,
-
     private readonly tagsService: TagsService,
-
     /** Injecting pagination provider */
-    private readonly paginationProvider: PaginationProvider
+    private readonly paginationProvider: PaginationProvider,
+    /** injecting the create post provider */
+    private readonly createPostProvider: CreatePostProvider
   ) {}
 
-  public async createPost(createPostDTO: CreatePostDTO) {
-    // Check for existing post with the same slug
-    const postExist = await this.postRepository.findOne({
-      where: { slug: createPostDTO.slug }
-    });
-
-    if (postExist)
-      throw new ConflictException('Post with given slug already exists');
-
-    // Verify author exists
-    const author = await this.usersService.findOneById(createPostDTO.authorId);
-    if (!author)
-      throw new NotFoundException(
-        `Author with ID ${createPostDTO.authorId} not found`
-      );
-
-    // Resolve tags
-    let tags = [];
-    if (createPostDTO.tags && createPostDTO.tags.length > 0) {
-      tags = await this.tagsService.findMultipleTags(createPostDTO.tags);
-
-      // Optional: Throw error if no tags found
-      if (createPostDTO.tags.length > 0 && tags.length === 0)
-        throw new NotFoundException('No valid tags found');
-    }
-
-    // Create post with explicit author and tags
-    const post = this.postRepository.create({
-      ...createPostDTO,
-      author,
-      tags // Set resolved tags
-    });
-
-    try {
-      return await this.postRepository.save(post);
-    } catch (error) {
-      console.error('Error saving post:', error);
-      throw new InternalServerErrorException('Failed to create post');
-    }
+  public async createPost(
+    createPostDTO: CreatePostDTO,
+    user: ActiveUserInterface
+  ) {
+    return this.createPostProvider.createPost(createPostDTO, user);
   }
 
   /** Get all posts */
