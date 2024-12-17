@@ -11,7 +11,7 @@ import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.p
 import profileConfig from './config/profileConfig';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
-import { FindOneGoogleIdProvider } from './providers/find-one-google-id.provider';
+import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id.provider';
 
 @Module({
   controllers: [UsersController],
@@ -20,7 +20,7 @@ import { FindOneGoogleIdProvider } from './providers/find-one-google-id.provider
     UsersCreateManyProvider,
     CreateUserProvider,
     FindOneUserByEmailProvider,
-    FindOneGoogleIdProvider
+    FindOneByGoogleIdProvider
   ],
   exports: [UsersService],
   imports: [
