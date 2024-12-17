@@ -38,9 +38,6 @@ async function bootstrap() {
   //enable cors
   app.enableCors();
 
-  // add global interceptors
-  app.useGlobalInterceptors(new DataResponseInterceptor());
-
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
