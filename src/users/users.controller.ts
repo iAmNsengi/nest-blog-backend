@@ -1,10 +1,12 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
   ParseIntPipe,
-  Post
+  Post,
+  UseInterceptors
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -37,6 +39,7 @@ export class UsersController {
   }
 
   @Post('')
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Create a new User' })
   @ApiResponse({ status: 200, description: 'User created successfully' })
   @ApiResponse({
