@@ -4,17 +4,12 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Post,
-  SetMetadata,
-  UseGuards
+  Post
 } from '@nestjs/common';
 import { UsersService } from './providers/users.services';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { CreateManyUsersDTO } from './dtos/create-many-user.dto';
-import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { AuthType } from 'src/auth/enums/auth-type.enum';
 
 @ApiTags('Users')
 @Controller('users')
