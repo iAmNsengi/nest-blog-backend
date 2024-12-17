@@ -33,7 +33,12 @@ export class GoogleAuthenticationService implements OnModuleInit {
     });
 
     // extract the payload from Google JWT
-    const { email, sub: googleId } = loginTicket.getPayload();
+    const {
+      email,
+      sub: googleId,
+      family_name: lastName,
+      given_name: firstName
+    } = loginTicket.getPayload();
     // Find the user in the databse using the googleId
     const user = await this.usersService.findOneByUserGoogleId(googleId);
     if (user) {
@@ -42,11 +47,11 @@ export class GoogleAuthenticationService implements OnModuleInit {
 
     // If not create a new user and then generate tokens
     const newUser = await this.usersService.createUser({
-      firstName: loginTicket.getPayload().family_name,
-      lastName: loginTicket.getPayload().given_name,
-      email: loginTicket.getPayload().email,
+      firstName,
+      lastName,
+      email,
       password: '',
-      googleId: loginTicket.getUserId()
+      googleId
     });
 
     // Throw unauthorized exception
