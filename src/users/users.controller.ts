@@ -22,7 +22,6 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  @Auth(AuthType.None)
   public getAllUsers() {
     return this.userService.findAll();
   }
@@ -54,7 +53,6 @@ export class UsersController {
     return this.userService.createUser(createUserDTO);
   }
 
-  @Auth(AuthType.Bearer)
   @Post('/create-many')
   @ApiOperation({ description: 'Create many users' })
   public createManyUsers(@Body() createManyUsersDTO: CreateManyUsersDTO) {
