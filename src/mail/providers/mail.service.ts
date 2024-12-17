@@ -8,7 +8,7 @@ export class MailService {
     /** inject the mailservice */
     private mailerService: MailerService
   ) {}
-  public async sendUserWelcome(user: User) {
+  public async sendUserWelcome(user: User): Promise<void> {
     await this.mailerService.sendMail({
       to: user.email,
       from: `Onboarding Team <support@zerblog.com>`,
