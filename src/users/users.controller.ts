@@ -16,6 +16,7 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 
 @ApiTags('Users')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -42,7 +43,6 @@ export class UsersController {
   }
 
   @Post('')
-  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ description: 'Create a new User' })
   @ApiResponse({ status: 200, description: 'User created successfully' })
   @ApiResponse({
