@@ -12,6 +12,8 @@ import { UsersService } from './providers/users.services';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { CreateManyUsersDTO } from './dtos/create-many-user.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
 
 @ApiTags('Users')
 @Controller('users')
@@ -19,6 +21,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
+  @Auth(AuthType.None)
   public getAllUsers() {
     return this.userService.findAll();
   }
