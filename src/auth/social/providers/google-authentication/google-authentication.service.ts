@@ -31,6 +31,7 @@ export class GoogleAuthenticationService implements OnModuleInit {
     const loginTicket = await this.oauthClient.verifyIdToken({
       idToken: googleTokenDTO.token
     });
+
     // extract the payload from Google JWT
     const { email, sub: googleId } = loginTicket.getPayload();
     // Find the user in the databse using the googleId
@@ -38,7 +39,16 @@ export class GoogleAuthenticationService implements OnModuleInit {
     if (user) {
       return await this.generateTokensProvider.generateTokens(user);
     }
+
     // If not create a new user and then generate tokens
+    const newUser = await this.usersService.createUser({
+      firstName: loginTicket.getPayload().family_name,
+      lastName: loginTicket.getPayload().given_name,
+      email: loginTicket.getPayload().email,
+      password: '',
+      googleId: loginTicket.getUserId()
+    });
+
     // Throw unauthorized exception
   }
 }

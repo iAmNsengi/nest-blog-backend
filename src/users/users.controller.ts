@@ -22,6 +22,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
+  @Auth(AuthType.None)
   public getAllUsers() {
     return this.userService.findAll();
   }

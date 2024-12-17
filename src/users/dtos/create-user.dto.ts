@@ -47,4 +47,8 @@ export class CreateUserDTO {
   )
   @ApiProperty({ example: 'Strong$1234' })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  googleId?: string;
 }
