@@ -7,23 +7,20 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 @Global()
 @Module({
-  providers: [MailService],
-  exports: [MailService],
   imports: [
     MailerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
         transport: {
           host: config.get('appConfig.mailHost'),
-          secure: false,
           port: 2525,
           auth: {
-            user: config.get('appConfig.mailSMTPUser'),
-            password: config.get('appConfig.mailSMTPPassword')
+            user: config.get('appConfig.mailSMTPUsername'),
+            pass: config.get('appConfig.mailSMTPPassword')
           }
         },
-        default: {
-          from: `ZerBlog <no-reply@zerblog.com>`
+        defaults: {
+          from: `Onboarding Team <support@zerblog.com>`
         },
         template: {
           dir: join(__dirname, 'templates'),
@@ -32,6 +29,8 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
         }
       })
     })
-  ]
+  ],
+  providers: [MailService],
+  exports: [MailService]
 })
 export class MailModule {}
