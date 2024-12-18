@@ -22,7 +22,6 @@ export class GoogleAuthenticationService implements OnModuleInit {
     /** Inject jwtConfiguration */
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
-
     /** inject the generate tokens provider */
     private readonly generateTokensProvider: GenerateTokensProvider,
     /** injecting the mail service */
