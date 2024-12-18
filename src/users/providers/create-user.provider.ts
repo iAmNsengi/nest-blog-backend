@@ -6,25 +6,14 @@ import {
   InternalServerErrorException
 } from '@nestjs/common';
 import { CreateUserDTO } from '../dtos/create-user.dto';
-import { CreateManyUsersDTO } from '../dtos/create-many-user.dto';
-import requestTimeoutError from 'src/errors/RequestTimeout';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { User } from '../user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UsersCreateManyProvider } from './users-create-many.provider';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
-import { create } from 'domain';
 import { MailService } from 'src/mail/providers/mail.service';
-import { log } from 'console';
 
 @Injectable()
 export class CreateUserProvider {
   constructor(
-    /** inject users repository */
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
-    /** Injecting user  create many provider */
-    private readonly usersCreateManyProvider: UsersCreateManyProvider,
     /** inject hashing provider */
     @Inject(forwardRef(() => HashingProvider))
     private readonly hashingProvider: HashingProvider,
