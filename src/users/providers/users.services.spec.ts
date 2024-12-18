@@ -61,7 +61,6 @@ describe('UsersService', () => {
     it('Should be defined', () => {
       expect(service.createUser).toBeDefined();
     });
-
     it('Should call create user on CreateUserProvider', async () => {
       let user = await service.createUser({
         firstName: 'John',
