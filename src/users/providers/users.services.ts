@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  forwardRef,
-  Inject,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
-import { AuthService } from 'src/auth/providers/auth.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,8 +17,6 @@ import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 export class UsersService {
   /** Constructor */
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
     /** injecting the usersrepository */
     @InjectRepository(User)
     private usersRepository: Repository<User>,
