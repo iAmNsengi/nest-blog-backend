@@ -67,12 +67,7 @@ export class CreateUserProvider {
       await queryRunner.rollbackTransaction();
 
       // log the error
-      console.log(error);
-
-      // throw an error
-      throw new InternalServerErrorException(
-        "Couldn't create the user at the moment, Try again later."
-      );
+      throw error;
     }
   }
 }

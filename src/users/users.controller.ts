@@ -43,6 +43,7 @@ export class UsersController {
   }
 
   @Post('')
+  @Auth(AuthType.None)
   @ApiOperation({ description: 'Create a new User' })
   @ApiResponse({ status: 200, description: 'User created successfully' })
   @ApiResponse({
