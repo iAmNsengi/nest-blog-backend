@@ -2,15 +2,17 @@ import {
   forwardRef,
   Inject,
   Injectable,
-  OnModuleInit,
-  UnauthorizedException
+  InternalServerErrorException,
+  OnModuleInit
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { OAuth2Client } from 'google-auth-library';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { GoogleTokenDTO } from '../../dtos/google-token.dto';
-import { UsersService } from 'src/users/providers/users.services';
 import { GenerateTokensProvider } from 'src/auth/providers/generate-tokens.provider';
+import { MailService } from 'src/mail/providers/mail.service';
+import { DataSource } from 'typeorm';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class GoogleAuthenticationService implements OnModuleInit {
@@ -20,11 +22,13 @@ export class GoogleAuthenticationService implements OnModuleInit {
     /** Inject jwtConfiguration */
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
-    /** injecting the usersService */
-    @Inject(forwardRef(() => UsersService))
-    private readonly usersService: UsersService,
+
     /** inject the generate tokens provider */
-    private readonly generateTokensProvider: GenerateTokensProvider
+    private readonly generateTokensProvider: GenerateTokensProvider,
+    /** injecting the mail service */
+    private readonly mailService: MailService,
+    /** injecting the datasource */
+    private readonly dataSource: DataSource
   ) {}
 
   onModuleInit() {
@@ -33,7 +37,11 @@ export class GoogleAuthenticationService implements OnModuleInit {
     this.oauthClient = new OAuth2Client(clientId, clientSecret);
   }
   public async authenticate(googleTokenDTO: GoogleTokenDTO) {
+    const queryRunner = this.dataSource.createQueryRunner();
     try {
+      // connecting to the query runner
+      await queryRunner.connect();
+
       //verify the google token sent by user
       const loginTicket = await this.oauthClient.verifyIdToken({
         idToken: googleTokenDTO.token
@@ -46,14 +54,20 @@ export class GoogleAuthenticationService implements OnModuleInit {
         family_name: lastName,
         given_name: firstName
       } = loginTicket.getPayload();
+
+      // start the transaction
+      await queryRunner.startTransaction();
+
       // Find the user in the databse using the googleId
-      const user = await this.usersService.findOneByUserGoogleId(googleId);
+      const user = await queryRunner.manager.findOne(User, {
+        where: { googleId }
+      });
       if (user) {
         return await this.generateTokensProvider.generateTokens(user);
       }
 
       // If not create a new user and then generate tokens
-      const newUser = await this.usersService.createUser({
+      const newUser = await queryRunner.manager.create(User, {
         firstName,
         lastName,
         email,
@@ -61,10 +75,26 @@ export class GoogleAuthenticationService implements OnModuleInit {
         googleId
       });
 
-      if (newUser)
-        return await this.generateTokensProvider.generateTokens(newUser);
+      // save the user in the database
+      await queryRunner.manager.save(newUser);
+
+      // send a confirmation email to the user
+      await this.mailService.sendUserWelcome(newUser);
+
+      // generate tokens
+      const tokens = await this.generateTokensProvider.generateTokens(newUser);
+
+      // commit the transaction if everything was successul
+      await queryRunner.commitTransaction();
+
+      return tokens;
     } catch (error) {
-      throw new UnauthorizedException();
+      // if there was an error rollback
+      await queryRunner.rollbackTransaction();
+      // throw an error
+      throw new InternalServerErrorException(
+        "Couldn't create the user at the moment, try again later"
+      );
     }
   }
 }
