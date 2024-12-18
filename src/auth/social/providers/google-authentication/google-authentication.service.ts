@@ -91,6 +91,9 @@ export class GoogleAuthenticationService implements OnModuleInit {
     } catch (error) {
       // if there was an error rollback
       await queryRunner.rollbackTransaction();
+
+      console.log(error);
+
       // throw an error
       throw new InternalServerErrorException(
         "Couldn't create the user at the moment, try again later"
